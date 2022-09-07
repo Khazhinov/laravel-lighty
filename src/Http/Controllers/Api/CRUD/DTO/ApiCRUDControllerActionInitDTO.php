@@ -7,7 +7,6 @@ namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO;
 use Khazhinov\LaravelLighty\DTO\DataTransferObject;
 use Khazhinov\LaravelLighty\DTO\Validation\ClassExists;
 use Khazhinov\LaravelLighty\DTO\Validation\ExistsInParents;
-use ReflectionException;
 use RuntimeException;
 
 class ApiCRUDControllerActionInitDTO extends DataTransferObject

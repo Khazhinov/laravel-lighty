@@ -38,7 +38,7 @@ class IndexRequest extends BaseRequest
                 new Enum(type: IndexActionRequestPayloadFilterOperatorEnum::class),
             ],
             'filter.*.value' => [
-                'required_with:filter',
+                'nullable',
             ],
             'filter.*.boolean' => [
                 'sometimes',
