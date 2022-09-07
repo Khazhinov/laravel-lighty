@@ -1,0 +1,32 @@
+<?php
+
+namespace {{ model_namespace }};
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Khazhinov\LaravelLighty\Models\Attributes\Relationships\Relationship;
+use Khazhinov\LaravelLighty\Models\Attributes\Relationships\RelationshipTypeEnum;
+use Khazhinov\LaravelLighty\Models\ModelLoggingable;
+
+final class {{ model_name }} extends ModelLoggingable
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+    ];
+
+//    #[
+//        Relationship(
+//            related: SomethingClass::class,
+//            type: RelationshipTypeEnum::BelongsTo,
+//            aliases: [
+//                'something_class',
+//            ]
+//        )
+//    ]
+//    public function somethingClass(): BelongsTo
+//    {
+//        return $this->belongsTo(SomethingClass::class);
+//    }
+}

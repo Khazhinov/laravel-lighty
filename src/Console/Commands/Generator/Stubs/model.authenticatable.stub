@@ -1,0 +1,62 @@
+<?php
+
+namespace {{ model_namespace }};
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Khazhinov\LaravelLighty\Models\Attributes\Relationships\Relationship;
+use Khazhinov\LaravelLighty\Models\Attributes\Relationships\RelationshipTypeEnum;
+use Khazhinov\LaravelLighty\Models\AuthenticatableModel;
+
+final class {{ model_name }} extends AuthenticatableModel
+{
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+//    #[
+//        Relationship(
+//            related: SomethingClass::class,
+//            type: RelationshipTypeEnum::BelongsTo,
+//            aliases: [
+//                'something_class',
+//            ]
+//        )
+//    ]
+//    public function somethingClass(): BelongsTo
+//    {
+//        return $this->belongsTo(SomethingClass::class);
+//    }
+}

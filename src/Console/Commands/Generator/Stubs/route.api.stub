@@ -1,0 +1,24 @@
+#/api/{{ route_path }}
+Route::group([
+    "namespace" => "{{ model_class }}",
+    "prefix" => "/{{ route_path }}",
+    "as" => "{{ route_path_snake }}.",
+], static function () {
+    Route::get("/validations/{method?}", "{{ controller_name }}@getValidations")->name("validations");
+
+    Route::get("/", "{{ controller_name }}@index")->name("index");
+    Route::post("/search", "{{ controller_name }}@index")->name("search");
+    Route::post("/setPosition", "{{ controller_name }}@setPosition")->name("set-position");
+
+    Route::post("/", "{{ controller_name }}@store")->name("store");
+    Route::delete("/", "{{ controller_name }}@bulkDestroy")->name("bulk-destroy");
+
+    #/api/v2.0/{{ route_path }}/:id
+    Route::group([
+        "prefix" => "/{key}",
+    ], static function () {
+        Route::get("/", "{{ controller_name }}@show")->name("show");
+        Route::put("/", "{{ controller_name }}@update")->name("update");
+        Route::delete("/", "{{ controller_name }}@destroy")->name("destroy");
+    });
+});

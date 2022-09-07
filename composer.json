@@ -1,0 +1,68 @@
+{
+  "name": "khazhinov/laravel-lighty",
+  "type": "library",
+  "description": "A set of tools for quickly creating a CRUD REST API",
+  "keywords": [
+    "laravel",
+    "api",
+    "rest",
+    "crud"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Khazhinov Vladislav",
+      "email": "khazhinov@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "ext-exif": "*",
+    "ext-fileinfo": "*",
+    "ext-json": "*",
+    "ext-sodium": "*",
+    "illuminate/bus": "^9",
+    "illuminate/config": "^9",
+    "illuminate/console": "^9",
+    "illuminate/database": "^9",
+    "illuminate/http": "^9",
+    "illuminate/pipeline": "^9",
+    "illuminate/support": "^9",
+    "jms/serializer": "*",
+    "maatwebsite/excel": "^3.1",
+    "psr/simple-cache": "^1.0",
+    "spatie/data-transfer-object": "^3.8",
+    "symfony/console": "^6.1"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.11",
+    "laravel/framework": "^9",
+    "phpstan/extension-installer": "^1.1",
+    "phpstan/phpstan-symfony": "^1.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "Khazhinov\\LaravelLighty\\": "src/"
+    },
+    "files": [
+      "src/helpers.php"
+    ]
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "phpstan/extension-installer": true
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Khazhinov\\LaravelLighty\\LaravelLightyServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "analyse": "vendor/bin/phpstan analyse --configuration phpstan.neon",
+    "format": "vendor/bin/php-cs-fixer fix --config .php_cs.dist.php --allow-risky=yes"
+  }
+}

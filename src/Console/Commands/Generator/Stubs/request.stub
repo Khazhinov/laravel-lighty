@@ -1,0 +1,19 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ request_namespace }};
+
+use Khazhinov\LaravelLighty\Http\Requests\BaseRequest;
+
+final class {{ request_name }} extends BaseRequest
+{
+    public function rules()
+    {
+        return [
+            //
+        ];
+    }
+}
+
+

@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+namespace {{ controller_namespace }};
+
+use JsonException;
+use Khazhinov\LaravelLighty\Http\Controllers\Api\ApiController;
+use Khazhinov\LaravelLighty\Transaction\WithDBTransaction;
+use Khazhinov\LaravelLighty\Transaction\WithDBTransactionInterface;
+use ReflectionException;
+use Spatie\DataTransferObject\Exceptions\UnknownProperties;
+use Symfony\Component\HttpFoundation\Response;
+
+final class {{ controller_name }} extends ApiController implements WithDBTransactionInterface
+{
+    use WithDBTransaction;
+
+    /**
+     * @return Response
+     * @throws JsonException
+     * @throws ReflectionException
+     * @throws UnknownProperties
+     */
+    public function testFunction(): Response
+    {
+        return $this->respond(
+            $this->buildActionResponseDTO(
+                data: [
+                    'Awesome!',
+                ]
+            )
+        );
+    }
+}

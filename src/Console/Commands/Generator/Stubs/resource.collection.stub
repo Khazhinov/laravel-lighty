@@ -1,0 +1,25 @@
+<?php
+
+namespace {{ resource_namespace }};
+
+use {{ model_namespace }}\{{ model_name }};
+use Illuminate\Contracts\Support\Arrayable;
+use JsonSerializable;
+use Khazhinov\LaravelLighty\Http\Resources\CollectionResource;
+
+/**
+ * @property  {{ model_name }}[] $collection
+ */
+class {{ resource_name }} extends CollectionResource
+{
+    /**
+     * @param $request
+     * @return array <mixed>|Arrayable|JsonSerializable
+     */
+    public function toArray($request): array|JsonSerializable|Arrayable
+    {
+        return [
+            'data' => $this->collection,
+        ];
+    }
+}
