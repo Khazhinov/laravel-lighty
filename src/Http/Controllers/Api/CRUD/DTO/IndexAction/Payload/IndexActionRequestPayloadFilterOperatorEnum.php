@@ -6,7 +6,7 @@ namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payl
 
 enum IndexActionRequestPayloadFilterOperatorEnum: string
 {
-    case Equal = '==';
+    case Equal = '=';
     case NotEqual = '!=';
     case Like = 'like';
     case ILike = 'ilike';
