@@ -23,14 +23,14 @@ class LaravelLightyServiceProvider extends ServiceProvider
 
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/lighty.php', 'common-system');
+        $this->mergeConfigFrom(__DIR__.'/../config/lighty.php', 'lighty');
         $this->registerCommands();
     }
 
     protected function registerPublishables(): void
     {
         $this->publishes([
-            __DIR__.'/../config/common-system.php' => config_path('common-system.php'),
+            __DIR__.'/../config/common-system.php' => config_path('lighty.php'),
         ], 'config');
 
         $this->publishes([
