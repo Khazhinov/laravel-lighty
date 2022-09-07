@@ -125,7 +125,14 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
      */
     protected function setAllowedRelationships(array $allowed_relationships): void
     {
-        $this->allowed_relationships = $allowed_relationships;
+        $completed_allowed_relationships = [];
+        foreach ($allowed_relationships as $relationship) {
+            if ($relationship_completed = $this->current_model->completeRelation($relationship)) {
+                $completed_allowed_relationships[] = $relationship_completed;
+            }
+        }
+
+        $this->allowed_relationships = $completed_allowed_relationships;
     }
 
     /**
