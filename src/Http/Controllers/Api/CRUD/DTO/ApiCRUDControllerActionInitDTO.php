@@ -24,14 +24,26 @@ class ApiCRUDControllerActionInitDTO extends DataTransferObject
     public string $action_option_class;
 
     /**
-     * @throws ReflectionException
+     * @param  ApiCRUDControllerMetaDTO  $controller_meta
+     * @return ApiCRUDControllerOptionDTO
      */
-    public function getActionOptionDTO(): ApiCRUDControllerOptionDTO
+    public function getActionOptionDTO(ApiCRUDControllerMetaDTO $controller_meta): ApiCRUDControllerOptionDTO
     {
+        $relationships_ignore_allowed = false;
+        if (! $controller_meta->hasAllowedRelationships()) {
+            $relationships_ignore_allowed = true;
+        }
+
+        $base_options = [
+            'relationships' => [
+                'ignore_allowed' => $relationships_ignore_allowed,
+            ],
+        ];
+
         if ($this->action_options) {
-            $action_option_dto = new $this->action_option_class($this->action_options);
+            $action_option_dto = new $this->action_option_class(array_merge_recursive_distinct($base_options, $this->action_options));
         } else {
-            $action_option_dto = new $this->action_option_class();
+            $action_option_dto = new $this->action_option_class($base_options);
         }
 
         if (! is_a($action_option_dto, ApiCRUDControllerOptionDTO::class, true)) {

@@ -91,21 +91,6 @@ abstract class Controller extends BaseController
     }
 
     /**
-     * @param  ApiCRUDControllerActionInitDTO  $action_init_dto
-     * @return ApiCRUDControllerOptionDTO
-     * @throws ReflectionException
-     */
-    protected function initFunction(ApiCRUDControllerActionInitDTO $action_init_dto): ApiCRUDControllerOptionDTO
-    {
-        $action_options_dto = $action_init_dto->getActionOptionDTO();
-        $this->setOptions($action_options_dto->toArray());
-
-        $this->setCurrentAction($action_init_dto->action_name);
-
-        return $action_options_dto;
-    }
-
-    /**
      * Set controller action type.
      *
      * @param  string  $current_action

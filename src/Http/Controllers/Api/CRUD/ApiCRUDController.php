@@ -60,6 +60,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
     {
         parent::__construct();
 
+        $this->controller_meta = $controller_meta_dto;
         $this->setCurrentModel($controller_meta_dto->model_class);
         $this->setSingleResource($controller_meta_dto->single_resource_class);
         $this->setCollectionResource($controller_meta_dto->collection_resource_class);
@@ -69,6 +70,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
         }
     }
 
+    protected readonly ApiCRUDControllerMetaDTO $controller_meta;
     protected string $single_resource;
     protected string $collection_resource;
 
@@ -141,6 +143,20 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
     protected function checkRelationship(string $relationship): bool
     {
         return in_array($relationship, $this->getAllowedRelationships(), true);
+    }
+
+    /**
+     * @param  ApiCRUDControllerActionInitDTO  $action_init_dto
+     * @return ApiCRUDControllerOptionDTO
+     */
+    protected function initFunction(ApiCRUDControllerActionInitDTO $action_init_dto): ApiCRUDControllerOptionDTO
+    {
+        $action_options_dto = $action_init_dto->getActionOptionDTO($this->controller_meta);
+        $this->setOptions($action_options_dto->toArray());
+
+        $this->setCurrentAction($action_init_dto->action_name);
+
+        return $action_options_dto;
     }
 
     /**
