@@ -30,7 +30,7 @@ class LaravelLightyServiceProvider extends ServiceProvider
     protected function registerPublishables(): void
     {
         $this->publishes([
-            __DIR__.'/../config/common-system.php' => config_path('lighty.php'),
+            __DIR__.'/../config/lighty.php' => config_path('lighty.php'),
         ], 'config');
 
         $this->publishes([
