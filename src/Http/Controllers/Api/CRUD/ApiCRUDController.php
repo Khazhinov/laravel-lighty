@@ -388,35 +388,18 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
      */
     protected function addRelationships(ActionOptionsRelationships $options, IndexActionRequestPayloadDTO $request, Builder|DatabaseBuilder $builder): Builder|DatabaseBuilder
     {
-        if ($options->enable) {
-            if ($relationships = $request->with) {
-                if (isset($relationships['relationships'])) {
-                    $relationships = array_keys($relationships['relationships']);
-                } else {
-                    return $builder;
-                }
-
-                /** @var string $relationship */
-                foreach ($relationships as $relationship) {
-                    if ($relationship_completed = $this->current_model->completeRelation($relationship)) {
-                        /** @var string $relationship_completed */
-                        $builder = $this->addRelationship($builder, $relationship_completed, $options->ignore_allowed);
-                    }
-                }
+        if ($options->enable && $relationships = $request->with) {
+            if (isset($relationships['relationships'])) {
+                $relationships = $relationships['relationships'];
+            } else {
+                return $builder;
             }
 
-            if (($other_relationships = $this->getOption('load_relationships.relationships'))
-                && $this->getOption('load_relationships.enable')) {
-                if (is_array($other_relationships)) {
-                    /** @var string $other_relationship */
-                    foreach ($other_relationships as $other_relationship) {
-                        if ($complete_other_relationship = $this->current_model->completeRelation($other_relationship)) {
-                            /** @var string $complete_other_relationship */
-                            $builder = $this->addRelationship($builder, $complete_other_relationship, true);
-                        }
-                    }
-                } else {
-                    $builder = $this->addRelationship($builder, $other_relationships, true);
+            /** @var string $relationship */
+            foreach ($relationships as $relationship) {
+                if ($relationship_completed = $this->current_model->completeRelation($relationship)) {
+                    /** @var string $relationship_completed */
+                    $builder = $this->addRelationship($builder, $relationship_completed, $options->ignore_allowed);
                 }
             }
         }
