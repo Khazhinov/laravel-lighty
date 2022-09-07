@@ -70,7 +70,7 @@ class Handler extends ExceptionHandler
 Просто используйте:
 
 ```bash
-php artisan lighty:generator TestEntity V1_0 --migration
+php artisan lighty:generator TestEntity v1.0 --migration
 ```
 
 В результате выполнения данной команды будет сгенерирована следующая структура файлов:

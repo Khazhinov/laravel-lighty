@@ -1,4 +1,4 @@
-#/api/{{ route_path }}
+#/api/{{ comment_route_path }}
 Route::group([
     "namespace" => "{{ model_class }}",
     "prefix" => "/{{ route_path }}",
@@ -13,7 +13,7 @@ Route::group([
     Route::post("/", "{{ controller_name }}@store")->name("store");
     Route::delete("/", "{{ controller_name }}@bulkDestroy")->name("bulk-destroy");
 
-    #/api/v2.0/{{ route_path }}/:id
+    #/api/{{ comment_route_path }}/:key
     Route::group([
         "prefix" => "/{key}",
     ], static function () {

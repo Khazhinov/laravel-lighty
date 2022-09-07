@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Khazhinov\LaravelLighty\Console\Commands\Generator;
 
+use Illuminate\Support\Str;
+
 final class ControllerGenerator extends BaseGenerator
 {
     /**
@@ -35,7 +37,7 @@ final class ControllerGenerator extends BaseGenerator
     protected $signature = "lighty:generate-controller 
                             {controller_name : Название контроллера. Используйте слэш (/) для вложенности.} 
                             {model_name : Название модели. Используйте слэш (/) для вложенности.} 
-                            {api_version : Версия разрабатываемого API, например V1_0.}
+                            {api_version : Версия разрабатываемого API, например v1.0.}
                             {--type=api-crud : Тип контроллера - a|api, ac|api-crud}";
 
     /**
@@ -60,6 +62,8 @@ final class ControllerGenerator extends BaseGenerator
 
         /** @var string $prefix */
         $prefix = $this->argument('api_version');
+        $prefix = str_ireplace('.', '_', $prefix);
+        $prefix = Str::upper($prefix);
         $this->default_generator_dir .= '/Api/' . $prefix;
         $this->default_generator_namespace .= '\\Api\\' . $prefix;
 

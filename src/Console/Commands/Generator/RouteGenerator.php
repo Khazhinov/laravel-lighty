@@ -20,7 +20,8 @@ final class RouteGenerator extends BaseCommand
      */
     protected $signature = "lighty:generate-route 
                             {model_name : Название модели. Используйте слэш (/) для вложенности.}
-                            {--type=api : Тип роутера  - a|api}";
+                            {--type=api : Тип роутера  - a|api}
+                            {--api-version= : Версия API, например: v1.0}";
 
     /**
      * The console command description.
@@ -84,9 +85,19 @@ final class RouteGenerator extends BaseCommand
         /** @var string $model_name */
         $model_name = $this->argument('model_name');
 
-        $data = str_ireplace("{{ model_class }}", $model_name, $data);
-        $data = str_ireplace("{{ route_path }}", helper_string_plural(lcfirst($model_name)), $data);
+        /** @var string|null $api_version */
+        $api_version = $this->option('api-version');
+
+        if ($api_version) {
+            $data =  str_ireplace("{{ comment_route_path }}", $api_version . '/' . helper_string_plural(lcfirst($model_name)), $data);
+            $data = str_ireplace("{{ route_path }}", helper_string_plural(lcfirst($model_name)), $data);
+        } else {
+            $data = str_ireplace("{{ comment_route_path }}", helper_string_plural(lcfirst($model_name)), $data);
+            $data = str_ireplace("{{ route_path }}", helper_string_plural(lcfirst($model_name)), $data);
+        }
+
         $data = str_ireplace("{{ route_path_snake }}", helper_string_snake(helper_string_plural($model_name)), $data);
+        $data = str_ireplace("{{ model_class }}", $model_name, $data);
         $data = str_ireplace("{{ controller_name }}", "{$model_name}CRUDController", $data);
 
         return $data;

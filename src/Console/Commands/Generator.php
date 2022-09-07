@@ -75,6 +75,7 @@ final class Generator extends BaseCommand
 
         $this->call('lighty:generate-route', [
             'model_name' => $model_name,
+            '--api-version' => $api_version
         ]);
 
         return 0;
