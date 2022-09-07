@@ -64,12 +64,16 @@ if (! function_exists('get_user')) {
      */
     function get_user(string $guard = 'api'): AuthenticatableModel|null
     {
-        /** @var Factory $auth */
-        $auth = auth();
-        $user = $auth->guard($guard)->user();
+        try {
+            /** @var Factory $auth */
+            $auth = auth();
+            $user = $auth->guard($guard)->user();
 
-        if ($user instanceof AuthenticatableModel) {
-            return $user;
+            if ($user instanceof AuthenticatableModel) {
+                return $user;
+            }
+        } catch (Throwable) {
+            return null;
         }
 
         return null;
