@@ -3,6 +3,6 @@
 Набор инструментов для быстрого создания CRUD REST API
 
 
-## License
+## Лицензия
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Для получения большей информации обращайтесь к [файлу лицензии](LICENSE.md).
