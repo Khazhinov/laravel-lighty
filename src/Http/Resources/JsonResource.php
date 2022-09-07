@@ -97,8 +97,9 @@ abstract class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
 
         if ($request->has('with')) {
             $with = $request->get('with');
-            if (is_array($with)) {
-                return helper_array_has($with, $key);
+            $exploded_key = explode('.', $key);
+            if (count($exploded_key) === 2 && array_key_exists($exploded_key[0], $with)) {
+                return in_array($exploded_key[1], $with[$exploded_key[0]], true);
             }
         }
 
