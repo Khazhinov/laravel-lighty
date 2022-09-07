@@ -16,7 +16,7 @@ final class ResourceGenerator extends BaseGenerator
      *
      * @var string
      */
-    protected $signature = "service:generate-resource 
+    protected $signature = "lighty:generate-resource 
                             {resource_name : Название ресурса. Используйте слэш (/) для вложенности.}
                             {model_name : Название модели. Используйте слэш (/) для вложенности.} 
                             {--type=single : Тип ресурса  - s|single or c|collection}";

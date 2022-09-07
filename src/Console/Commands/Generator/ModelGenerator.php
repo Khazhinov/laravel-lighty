@@ -22,7 +22,7 @@ final class ModelGenerator extends BaseGenerator
      *
      * @var string
      */
-    protected $signature = "service:generate-model 
+    protected $signature = "lighty:generate-model 
                             {model_name : Название модели. Используйте слэш (/) для вложенности.}
                             {--type=loggingable : Тип модели - l|loggingable or a|authenticatable}";
 

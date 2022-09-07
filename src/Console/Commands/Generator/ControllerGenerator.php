@@ -32,7 +32,7 @@ final class ControllerGenerator extends BaseGenerator
      *
      * @var string
      */
-    protected $signature = "service:generate-controller 
+    protected $signature = "lighty:generate-controller 
                             {controller_name : Название контроллера. Используйте слэш (/) для вложенности.} 
                             {model_name : Название модели. Используйте слэш (/) для вложенности.} 
                             {api_version : Версия разрабатываемого API, например V1_0.}

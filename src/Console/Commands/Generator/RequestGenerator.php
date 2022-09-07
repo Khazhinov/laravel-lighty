@@ -22,7 +22,7 @@ final class RequestGenerator extends BaseGenerator
      *
      * @var string
      */
-    protected $signature = "service:generate-request 
+    protected $signature = "lighty:generate-request 
                             {request_name : Название запроса. Используйте слэш (/) для вложенности.}";
 
     /**

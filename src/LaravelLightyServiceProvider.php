@@ -18,12 +18,12 @@ class LaravelLightyServiceProvider extends ServiceProvider
     {
         $this->registerPublishables();
 
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'common-server');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'lighty');
     }
 
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/common-system.php', 'common-system');
+        $this->mergeConfigFrom(__DIR__.'/../config/lighty.php', 'common-system');
         $this->registerCommands();
     }
 
@@ -34,26 +34,26 @@ class LaravelLightyServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->publishes([
-            __DIR__.'/../resources/views' => resource_path('views/vendor/common-server'),
+            __DIR__.'/../resources/views' => resource_path('views/vendor/lighty'),
         ], 'views');
     }
 
     protected function registerCommands(): void
     {
-        $this->app->bind('command.service:generate-controller', ControllerGenerator::class);
-        $this->app->bind('command.service:generate-model', ModelGenerator::class);
-        $this->app->bind('command.service:generate-request', RequestGenerator::class);
-        $this->app->bind('command.service:generate-resource', ResourceGenerator::class);
-        $this->app->bind('command.service:generate-route', RouteGenerator::class);
-        $this->app->bind('command.service:generator', Generator::class);
+        $this->app->bind('command.lighty:generate-controller', ControllerGenerator::class);
+        $this->app->bind('command.lighty:generate-model', ModelGenerator::class);
+        $this->app->bind('command.lighty:generate-request', RequestGenerator::class);
+        $this->app->bind('command.lighty:generate-resource', ResourceGenerator::class);
+        $this->app->bind('command.lighty:generate-route', RouteGenerator::class);
+        $this->app->bind('command.lighty:generator', Generator::class);
 
         $this->commands([
-            'command.service:generate-controller',
-            'command.service:generate-model',
-            'command.service:generate-request',
-            'command.service:generate-resource',
-            'command.service:generate-route',
-            'command.service:generator',
+            'command.lighty:generate-controller',
+            'command.lighty:generate-model',
+            'command.lighty:generate-request',
+            'command.lighty:generate-resource',
+            'command.lighty:generate-route',
+            'command.lighty:generator',
         ]);
     }
 }

@@ -32,7 +32,7 @@ class ModelExport implements FromView, WithTitle, ShouldAutoSize //, WithStyles
     {
         /** @var View $view */
         $view = view(
-            view: 'common-server::api.exports.model_collection',
+            view: 'lighty::api.exports.model_collection',
             data: [
                 'items' => $this->items,
                 'export_columns' => $this->export_columns,

@@ -18,7 +18,7 @@ final class RouteGenerator extends BaseCommand
      *
      * @var string
      */
-    protected $signature = "service:generate-route 
+    protected $signature = "lighty:generate-route 
                             {model_name : Название модели. Используйте слэш (/) для вложенности.}
                             {--type=api : Тип роутера  - a|api}";
 

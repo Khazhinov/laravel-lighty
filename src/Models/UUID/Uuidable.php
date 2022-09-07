@@ -15,9 +15,9 @@ trait Uuidable
      */
     public function generateUuid(): string
     {
-        return match (config('system.models.uuid.version')) {
+        return match (config('lighty.models.uuid.version')) {
             4 => Uuid::uuid4()->toString(),
-            default => throw new ModelUUIDVersionUnsupportedException(config('system.models.uuid.version')),
+            default => throw new ModelUUIDVersionUnsupportedException(config('lighty.models.uuid.version')),
         };
     }
 }

@@ -8,7 +8,7 @@ use Khazhinov\LaravelLighty\Console\BaseCommand;
 
 final class Generator extends BaseCommand
 {
-    protected $signature = "service:generator 
+    protected $signature = "lighty:generator 
                             {model_name : Наименование модели.}
                             {api_version : Версия разрабатываемого API, например V1_0.}
                             {--migration : Флаг, говорящий о необходимости генерации миграций.}";
@@ -42,28 +42,28 @@ final class Generator extends BaseCommand
         /** @var string $model_name */
         $api_version = $this->argument('api_version');
 
-        $this->call('service:generate-model', [
+        $this->call('lighty:generate-model', [
             'model_name' => $model_name,
         ]);
-        $this->call('service:generate-resource', [
+        $this->call('lighty:generate-resource', [
             'resource_name' => $model_name,
             'model_name' => $model_name,
         ]);
-        $this->call('service:generate-resource', [
+        $this->call('lighty:generate-resource', [
             'resource_name' => $model_name,
             'model_name' => $model_name,
             '--type' => 'c',
         ]);
-        $this->call('service:generate-controller', [
+        $this->call('lighty:generate-controller', [
             'controller_name' => "{$model_name}/{$model_name}CRUDController",
             'model_name' => $model_name,
             'api_version' => $api_version,
             '--type' => 'ac',
         ]);
-        $this->call('service:generate-request', [
+        $this->call('lighty:generate-request', [
             'request_name' => "{$model_name}/{$model_name}StoreRequest",
         ]);
-        $this->call('service:generate-request', [
+        $this->call('lighty:generate-request', [
             'request_name' => "{$model_name}/{$model_name}UpdateRequest",
         ]);
 
@@ -73,7 +73,7 @@ final class Generator extends BaseCommand
             ]);
         }
 
-        $this->call('service:generate-route', [
+        $this->call('lighty:generate-route', [
             'model_name' => $model_name,
         ]);
 
