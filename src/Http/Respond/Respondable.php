@@ -21,7 +21,7 @@ trait Respondable
 
         $content = $serializer->serialize($action_response->buildResponseContent(), 'json', $context);
 
-        $response = new Response($content, $action_response->code ?: 200, $action_response->headers ?: []);
+        $response = new Response($content, $this->normalizeStatusCode($action_response->code), $action_response->headers ?: []);
 
         if (! is_null($closure)) {
             $tmp_response = $closure($response);
@@ -31,6 +31,15 @@ trait Respondable
         }
 
         return $response;
+    }
+
+    protected function normalizeStatusCode(int $status_code): int
+    {
+        if (array_key_exists($status_code, Response::$statusTexts)) {
+            return $status_code;
+        }
+
+        return 400;
     }
 
     public function getSerializer(): SerializerInterface
