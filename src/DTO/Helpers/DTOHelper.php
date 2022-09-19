@@ -34,11 +34,23 @@ class DTOHelper
                 if ($reflection_property_type instanceof ReflectionUnionType) {
                     $reflection_property_types = $reflection_property_type->getTypes();
 
+                    $has_null_definition = false;
+                    $result_definition = null;
                     foreach ($reflection_property_types as $reflection_property_type) {
                         $reflection_property_type_class = $reflection_property_type->getName();
-                        if (is_a($reflection_property_type_class, DataTransferObject::class, true)) {
-                            $result_properties[$reflection_property->getName()] = [];
+                        if ($reflection_property_type_class === "null") {
+                            $has_null_definition = true;
+
+                            break;
                         }
+
+                        if (is_a($reflection_property_type_class, DataTransferObject::class, true)) {
+                            $result_definition = $reflection_property->getName();
+                        }
+                    }
+
+                    if (! $has_null_definition && ! is_null($result_definition)) {
+                        $result_properties[$result_definition] = [];
                     }
                 } else {
                     $reflection_property_type_class = $reflection_property_type->getName();
