@@ -9,6 +9,7 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
 use ReflectionProperty;
+use ReflectionUnionType;
 
 /**
  * @template T of object
@@ -27,13 +28,23 @@ class DTOHelper
         $reflection_properties = $reflector->getProperties(ReflectionProperty::IS_PUBLIC);
         $result_properties = [];
         foreach ($reflection_properties as $reflection_property) {
-            /** @var ReflectionNamedType|null $reflection_property_type */
+            /** @var ReflectionNamedType|ReflectionUnionType|null $reflection_property_type */
             $reflection_property_type = $reflection_property->getType();
             if ($reflection_property_type) {
-                $reflection_property_type_class = $reflection_property_type->getName();
+                if ($reflection_property_type instanceof ReflectionUnionType) {
+                    $reflection_property_types = $reflection_property_type->getTypes();
 
-                if (is_a($reflection_property_type_class, DataTransferObject::class, true)) {
-                    $result_properties[$reflection_property->getName()] = [];
+                    foreach ($reflection_property_types as $reflection_property_type) {
+                        $reflection_property_type_class = $reflection_property_type->getName();
+                        if (is_a($reflection_property_type_class, DataTransferObject::class, true)) {
+                            $result_properties[$reflection_property->getName()] = [];
+                        }
+                    }
+                } else {
+                    $reflection_property_type_class = $reflection_property_type->getName();
+                    if (is_a($reflection_property_type_class, DataTransferObject::class, true)) {
+                        $result_properties[$reflection_property->getName()] = [];
+                    }
                 }
             }
         }
