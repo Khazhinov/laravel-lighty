@@ -524,7 +524,9 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
 
             return $this->respond(
                 $this->buildActionResponseDTO(
-                    data: 'ok',
+                    data: [
+                        'status' => 'ok',
+                    ],
                 )
             );
         } catch (Throwable $exception) {
@@ -869,7 +871,9 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
 
             return $this->respond(
                 $this->buildActionResponseDTO(
-                    data: 'ok',
+                    data: [
+                        'status' => 'ok',
+                    ],
                 )
             );
         } catch (Throwable $exception) {
@@ -953,7 +957,9 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
 
             return $this->respond(
                 $this->buildActionResponseDTO(
-                    data: 'ok',
+                    data: [
+                        'status' => 'ok',
+                    ],
                 )
             );
         } catch (Throwable $exception) {
