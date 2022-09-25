@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option;
 
-use Khazhinov\LaravelLighty\DTO\DataTransferObject;
-use Khazhinov\LaravelLighty\DTO\Validation\ArrayOfScalar;
-use Khazhinov\LaravelLighty\Enums\ScalarTypeEnum;
+use Khazhinov\PhpSupport\Enums\ScalarTypeEnum;
+use Khazhinov\PhpSupport\DTO\DataTransferObject;
+use Khazhinov\PhpSupport\DTO\Validation\ArrayOfScalar;
 
 class IndexActionOptionsFilters extends DataTransferObject
 {

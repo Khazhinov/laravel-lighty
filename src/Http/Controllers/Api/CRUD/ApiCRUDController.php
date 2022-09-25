@@ -482,7 +482,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
         $model_name = class_basename($this->current_model);
         $date = now()->format('_Y-M-d');
 
-        return ucfirst(helper_string_plural(helper_string_snake($model_name))).$date.'.'.$return_type;
+        return helper_string_ucfirst(helper_string_plural(helper_string_snake($model_name))).$date.'.'.$return_type;
     }
 
     /**

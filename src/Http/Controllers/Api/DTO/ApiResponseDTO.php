@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\DTO;
 
-use Khazhinov\LaravelLighty\DTO\DataTransferObject;
 use Khazhinov\LaravelLighty\Exceptions\Http\ActionResponseException;
+use Khazhinov\PhpSupport\DTO\DataTransferObject;
 
 class ApiResponseDTO extends DataTransferObject
 {

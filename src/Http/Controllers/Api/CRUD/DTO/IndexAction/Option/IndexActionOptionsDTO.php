@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option;
 
-use Khazhinov\LaravelLighty\DTO\Custer\DataTransferObjectCaster;
-use Khazhinov\LaravelLighty\DTO\Validation\ClassExists;
-use Khazhinov\LaravelLighty\DTO\Validation\ExistsInParents;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\ApiCRUDControllerOptionDTO;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadDTO;
 use Khazhinov\LaravelLighty\Http\Resources\SingleResource;
+use Khazhinov\PhpSupport\DTO\Custer\DataTransferObjectCaster;
+use Khazhinov\PhpSupport\DTO\Validation\ClassExists;
+use Khazhinov\PhpSupport\DTO\Validation\ExistsInParents;
 use Spatie\DataTransferObject\Attributes\CastWith;
 
 class IndexActionOptionsDTO extends ApiCRUDControllerOptionDTO

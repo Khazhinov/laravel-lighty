@@ -8,53 +8,6 @@ use Illuminate\Support\Collection;
 use Khazhinov\LaravelLighty\Http\Requests\Enum;
 use Khazhinov\LaravelLighty\Models\AuthenticatableModel;
 
-if (! function_exists('array_merge_recursive_distinct')) {
-    /**
-     * Merges any number of arrays / parameters recursively, replacing
-     * entries with string keys with values from latter arrays.
-     * If the entry or the next value to be assigned is an array, then it
-     * automagically treats both arguments as an array.
-     * Numeric entries are appended, not replaced, but only if they are
-     * unique
-     *
-     * @param  array<mixed>  ...$arrays
-     * @return array<mixed>
-     */
-    function array_merge_recursive_distinct(array ...$arrays): array
-    {
-        $base = array_shift($arrays);
-        if (! is_array($base)) {
-            $base = [$base];
-        }
-        foreach ($arrays as $append) {
-            if (! is_array($append)) {
-                $append = [$append];
-            }
-            foreach ($append as $key => $value) {
-                if (! array_key_exists($key, $base) && ! is_numeric($key)) {
-                    $base[$key] = $value;
-
-                    continue;
-                }
-
-                if ((isset($base[$key]) && is_array($base[$key])) || is_array($value)) {
-                    $base[$key] = array_merge_recursive_distinct($base[$key], $value);
-                } else {
-                    if (is_numeric($key)) {
-                        if (! in_array($value, $base, true)) {
-                            $base[] = $value;
-                        }
-                    } else {
-                        $base[$key] = $value;
-                    }
-                }
-            }
-        }
-
-        return $base;
-    }
-}
-
 if (! function_exists('get_user')) {
     /**
      * Get a guard instance by name.
@@ -77,70 +30,6 @@ if (! function_exists('get_user')) {
         }
 
         return null;
-    }
-}
-
-if (! function_exists('helper_array_get')) {
-    /**
-     * Get an item from an array using "dot" notation.
-     *
-     * @param  array<mixed>|ArrayAccess  $array
-     * @param  string|int|null  $key
-     * @param  mixed  $default
-     * @return mixed
-     */
-    function helper_array_get(array|ArrayAccess $array, string|int|null $key, mixed $default = null): mixed
-    {
-        return \Illuminate\Support\Arr::get($array, $key, $default);
-    }
-}
-
-if (! function_exists('helper_array_set')) {
-    /**
-     * Set an array item to a given value using "dot" notation.
-     *
-     * If no key is given to the method, the entire array will be replaced.
-     *
-     * @param  array<mixed>|ArrayAccess $array
-     * @param  string|null  $key
-     * @param  mixed  $value
-     * @return array<mixed>
-     */
-    function helper_array_set(array|ArrayAccess $array, string|null $key, mixed $value): array
-    {
-        return \Illuminate\Support\Arr::set($array, $key, $value);
-    }
-}
-
-if (! function_exists('helper_array_has')) {
-    /**
-     * Check if an item or items exist in an array using "dot" notation.
-     *
-     * @param  array<mixed>|ArrayAccess  $array
-     * @param string $key
-     * @return bool
-     */
-    function helper_array_has(array|ArrayAccess $array, string $key): bool
-    {
-        return \Illuminate\Support\Arr::has($array, $key);
-    }
-}
-
-if (! function_exists('helper_array_unset')) {
-    /**
-     * @param  array<int|string, mixed>  $array
-     * @param string|int $index
-     * @return array<int|string, mixed>
-     */
-    function helper_array_unset(array $array, string|int $index): array
-    {
-        unset($array[$index]);
-        $tmp_array = [];
-        foreach ($array as $item) {
-            $tmp_array[] = $item;
-        }
-
-        return $tmp_array;
     }
 }
 
@@ -167,61 +56,6 @@ if (! function_exists('convert_object_to_array')) {
         /** @var iterable<TKey, TValue> $object */
 
         return (new \Illuminate\Support\Fluent($object))->toArray();
-    }
-}
-
-if (! function_exists('helper_is_assoc_array')) {
-    /**
-     * Check if array is associative
-     *
-     * @param array<mixed> $array
-     * @return bool
-     */
-    function helper_is_assoc_array(array $array): bool
-    {
-        return ! array_is_list($array);
-    }
-}
-
-if (! function_exists('helper_string_snake')) {
-    /**
-     * To snake_case
-     *
-     * @param string $value
-     * @return string
-     */
-    function helper_string_snake(string $value): string
-    {
-        return \Illuminate\Support\Str::snake($value);
-    }
-}
-
-if (! function_exists('helper_string_title')) {
-    /**
-     * To Title Case
-     *
-     * @param string $value
-     * @return string
-     */
-    function helper_string_title(string $value): string
-    {
-        $snaked = helper_string_snake($value);
-        $title = str_replace('_', ' ', $snaked);
-
-        return \Illuminate\Support\Str::title($title);
-    }
-}
-
-if (! function_exists('helper_string_plural')) {
-    /**
-     * Converts a singular word string to its plural form.
-     *
-     * @param  string $string
-     * @return string
-     */
-    function helper_string_plural(string $string): string
-    {
-        return \Illuminate\Support\Str::plural($string);
     }
 }
 

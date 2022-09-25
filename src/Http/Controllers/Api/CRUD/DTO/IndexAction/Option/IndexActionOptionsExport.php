@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option;
 
-use Khazhinov\LaravelLighty\DTO\DataTransferObject;
-use Khazhinov\LaravelLighty\DTO\Validation\ClassExists;
 use Khazhinov\LaravelLighty\Exports\ModelExport;
+use Khazhinov\PhpSupport\DTO\DataTransferObject;
+use Khazhinov\PhpSupport\DTO\Validation\ClassExists;
 
 class IndexActionOptionsExport extends DataTransferObject
 {

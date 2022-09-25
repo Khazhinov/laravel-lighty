@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Khazhinov\LaravelLighty\Models\Attributes\Relationships;
 
 use Illuminate\Database\Eloquent\Model;
-use Khazhinov\LaravelLighty\DTO\DataTransferObject;
-use Khazhinov\LaravelLighty\DTO\Validation\ArrayOfScalar;
-use Khazhinov\LaravelLighty\DTO\Validation\ClassExists;
-use Khazhinov\LaravelLighty\DTO\Validation\ExistsInParents;
-use Khazhinov\LaravelLighty\Enums\ScalarTypeEnum;
+use Khazhinov\PhpSupport\Enums\ScalarTypeEnum;
+use Khazhinov\PhpSupport\DTO\DataTransferObject;
+use Khazhinov\PhpSupport\DTO\Validation\ArrayOfScalar;
+use Khazhinov\PhpSupport\DTO\Validation\ClassExists;
+use Khazhinov\PhpSupport\DTO\Validation\ExistsInParents;
 
 class RelationshipDTO extends DataTransferObject
 {

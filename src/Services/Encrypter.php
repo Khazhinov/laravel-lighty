@@ -10,7 +10,7 @@ use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
 use Illuminate\Contracts\Encryption\EncryptException;
 use Illuminate\Support\Str;
 use JsonException;
-use Khazhinov\LaravelLighty\Patterns\Singleton;
+use Khazhinov\PhpSupport\Patterns\Singleton;
 use RuntimeException;
 
 use function sodium_crypto_auth;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option;
 
-use Khazhinov\LaravelLighty\DTO\DataTransferObject;
+use Khazhinov\PhpSupport\DTO\DataTransferObject;
 
 class IndexActionOptionsPagination extends DataTransferObject
 {

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO;
 
-use Khazhinov\LaravelLighty\DTO\DataTransferObject;
-use Khazhinov\LaravelLighty\DTO\Validation\ClassExists;
-use Khazhinov\LaravelLighty\DTO\Validation\ExistsInParents;
+use Khazhinov\PhpSupport\DTO\DataTransferObject;
+use Khazhinov\PhpSupport\DTO\Validation\ClassExists;
+use Khazhinov\PhpSupport\DTO\Validation\ExistsInParents;
 use RuntimeException;
 
 class ApiCRUDControllerActionInitDTO extends DataTransferObject
@@ -40,7 +40,7 @@ class ApiCRUDControllerActionInitDTO extends DataTransferObject
         ];
 
         if ($this->action_options) {
-            $action_option_dto = new $this->action_option_class(array_merge_recursive_distinct($base_options, $this->action_options));
+            $action_option_dto = new $this->action_option_class(helper_array_merge_recursive_distinct($base_options, $this->action_options));
         } else {
             $action_option_dto = new $this->action_option_class($base_options);
         }
