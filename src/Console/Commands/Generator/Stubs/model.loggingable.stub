@@ -8,6 +8,18 @@ use Khazhinov\LaravelLighty\Models\Attributes\Relationships\Relationship;
 use Khazhinov\LaravelLighty\Models\Attributes\Relationships\RelationshipTypeEnum;
 use Khazhinov\LaravelLighty\Models\ModelLoggingable;
 
+/**
+ * App\Models\{{ model_name }}
+ *
+ * @property string|null $id Уникальный идентификатор действия
+ * @property string $created_by Идентификатор пользователя, создавшего запись
+ * @property string|null $updated_by Идентификатор пользователя, создавшего запись
+ * @property string|null $deleted_by Идентификатор пользователя, создавшего запись
+ * @property string $name Наименование действия
+ * @property \Illuminate\Support\Carbon|null $created_at Временная метка создания записи
+ * @property \Illuminate\Support\Carbon|null $updated_at Временная метка изменения записи
+ * @property \Illuminate\Support\Carbon|null $deleted_at Временная метка удаления записи
+ */
 final class {{ model_name }} extends ModelLoggingable
 {
     use HasFactory;

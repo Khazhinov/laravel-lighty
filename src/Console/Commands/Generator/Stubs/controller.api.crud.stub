@@ -12,12 +12,20 @@ use {{ model_namespace }}\{{ model_name }};
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Query\Builder as DatabaseBuilder;
 use JsonException;
+use Khazhinov\LaravelFlyDocs\Generator\Attributes as OpenApi;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\ApiCRUDController;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\ActionClosureModeEnum;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\ApiCRUDControllerMetaDTO;
 use Khazhinov\LaravelLighty\Http\Requests\CRUD\BulkDestroyRequest;
 use Khazhinov\LaravelLighty\Http\Requests\CRUD\IndexRequest;
 use Khazhinov\LaravelLighty\Http\Requests\CRUD\SetPositionRequest;
+use Khazhinov\LaravelLighty\OpenApi\Complexes\BulkDestroyActionComplex;
+use Khazhinov\LaravelLighty\OpenApi\Complexes\DestroyActionComplex;
+use Khazhinov\LaravelLighty\OpenApi\Complexes\IndexActionComplex;
+use Khazhinov\LaravelLighty\OpenApi\Complexes\SetPositionActionComplex;
+use Khazhinov\LaravelLighty\OpenApi\Complexes\ShowActionComplex;
+use Khazhinov\LaravelLighty\OpenApi\Complexes\StoreActionComplex;
+use Khazhinov\LaravelLighty\OpenApi\Complexes\UpdateActionComplex;
 use Khazhinov\LaravelLighty\Transaction\WithDBTransaction;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -46,12 +54,21 @@ final class {{ controller_name }} extends ApiCRUDController
     }
 
     /**
+     * Поиск сущностей
+     *
      * @param  IndexRequest  $request
      * @return BinaryFileResponse|Response
      * @throws ReflectionException
      * @throws UnknownProperties
      * @throws JsonException
      */
+    #[OpenApi\Operation(tags: ['{{ model_name }}'])]
+    #[OpenApi\Complex(
+        factory: IndexActionComplex::class,
+        model_class: {{ model_name }}::class,
+        collection_resource: {{ model_name }}Collection::class,
+        options: []
+    )]
     public function index(IndexRequest $request): mixed
     {
         return $this->indexAction(
@@ -61,6 +78,8 @@ final class {{ controller_name }} extends ApiCRUDController
     }
 
     /**
+     * Позиционирование сущностей
+     *
      * @param  SetPositionRequest  $request
      * @return Response
      * @throws UnknownProperties
@@ -68,6 +87,12 @@ final class {{ controller_name }} extends ApiCRUDController
      * @throws NotFoundExceptionInterface
      * @throws Throwable
      */
+    #[OpenApi\Operation(tags: ['{{ model_name }}'])]
+    #[OpenApi\Complex(
+        factory: SetPositionActionComplex::class,
+        model_class: {{ model_name }}::class,
+        options: []
+    )]
     public function setPosition(SetPositionRequest $request): Response
     {
         return $this->setPositionAction(
@@ -77,6 +102,8 @@ final class {{ controller_name }} extends ApiCRUDController
     }
 
     /**
+     * Массовое удаление сущностей
+     *
      * @param  BulkDestroyRequest  $request
      * @return Response
      * @throws JsonException
@@ -84,6 +111,12 @@ final class {{ controller_name }} extends ApiCRUDController
      * @throws Throwable
      * @throws UnknownProperties
      */
+    #[OpenApi\Operation(tags: ['{{ model_name }}'])]
+    #[OpenApi\Complex(
+        factory: BulkDestroyActionComplex::class,
+        model_class: {{ model_name }}::class,
+        options: []
+    )]
     public function bulkDestroy(BulkDestroyRequest $request): Response
     {
         return $this->bulkDestroyAction(
@@ -98,12 +131,21 @@ final class {{ controller_name }} extends ApiCRUDController
     }
 
     /**
-     * @param  string $key
+     * Получение сущности по идентификатору
+     *
+     * @param  string $key Идентификатор сущности
      * @return Response
      * @throws JsonException
      * @throws ReflectionException
      * @throws UnknownProperties
      */
+    #[OpenApi\Operation(tags: ['{{ model_name }}'])]
+    #[OpenApi\Complex(
+        factory: ShowActionComplex::class,
+        model_class: {{ model_name }}::class,
+        single_resource: {{ model_name }}Resource::class,
+        options: []
+    )]
     public function show(string $key): Response
     {
         return $this->showAction(
@@ -113,6 +155,8 @@ final class {{ controller_name }} extends ApiCRUDController
     }
 
     /**
+     * Создание сущности
+     *
      * @param  {{ model_name }}StoreRequest  $request
      * @return Response
      * @throws JsonException
@@ -120,6 +164,14 @@ final class {{ controller_name }} extends ApiCRUDController
      * @throws Throwable
      * @throws UnknownProperties
      */
+    #[OpenApi\Operation(tags: ['{{ model_name }}'])]
+    #[OpenApi\Complex(
+        factory: StoreActionComplex::class,
+        model_class: {{ model_name }}::class,
+        single_resource: {{ model_name }}Resource::class,
+        validation_request: {{ model_name }}StoreRequest::class,
+        options: []
+    )]
     public function store({{ model_name }}StoreRequest $request): Response
     {
         return $this->storeAction(
@@ -134,14 +186,24 @@ final class {{ controller_name }} extends ApiCRUDController
     }
 
     /**
+     * Изменение сущности по идентификатору
+     *
      * @param  {{ model_name }}UpdateRequest  $request
-     * @param  string $key
+     * @param  string $key Идентификатор сущности
      * @return Response
      * @throws JsonException
      * @throws ReflectionException
      * @throws Throwable
      * @throws UnknownProperties
      */
+    #[OpenApi\Operation(tags: ['{{ model_name }}'])]
+    #[OpenApi\Complex(
+        factory: UpdateActionComplex::class,
+        model_class: {{ model_name }}::class,
+        single_resource: {{ model_name }}Resource::class,
+        validation_request: {{ model_name }}UpdateRequest::class,
+        options: []
+    )]
     public function update({{ model_name }}UpdateRequest $request, string $key): Response
     {
         return $this->updateAction(
@@ -157,13 +219,21 @@ final class {{ controller_name }} extends ApiCRUDController
     }
 
     /**
-     * @param  string  $key
+     * Удаление сущности по идентификатору
+     *
+     * @param  string  $key Идентификатор сущности
      * @return Response
      * @throws JsonException
      * @throws ReflectionException
      * @throws Throwable
      * @throws UnknownProperties
      */
+    #[OpenApi\Operation(tags: ['{{ model_name }}'])]
+    #[OpenApi\Complex(
+        factory: DestroyActionComplex::class,
+        model_class: {{ model_name }}::class,
+        options: []
+    )]
     public function destroy(string $key): Response
     {
         return $this->destroyAction(

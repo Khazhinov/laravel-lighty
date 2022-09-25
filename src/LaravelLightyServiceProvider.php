@@ -11,6 +11,7 @@ use Khazhinov\LaravelLighty\Console\Commands\Generator\ModelGenerator;
 use Khazhinov\LaravelLighty\Console\Commands\Generator\RequestGenerator;
 use Khazhinov\LaravelLighty\Console\Commands\Generator\ResourceGenerator;
 use Khazhinov\LaravelLighty\Console\Commands\Generator\RouteGenerator;
+use Khazhinov\LaravelLighty\Console\Commands\Generator\MigrationGenerator;
 
 class LaravelLightyServiceProvider extends ServiceProvider
 {
@@ -45,6 +46,7 @@ class LaravelLightyServiceProvider extends ServiceProvider
         $this->app->bind('command.lighty:generate-request', RequestGenerator::class);
         $this->app->bind('command.lighty:generate-resource', ResourceGenerator::class);
         $this->app->bind('command.lighty:generate-route', RouteGenerator::class);
+        $this->app->bind('command.lighty:generate-migration', MigrationGenerator::class);
         $this->app->bind('command.lighty:generator', Generator::class);
 
         $this->commands([
@@ -53,6 +55,7 @@ class LaravelLightyServiceProvider extends ServiceProvider
             'command.lighty:generate-request',
             'command.lighty:generate-resource',
             'command.lighty:generate-route',
+            'command.lighty:generate-migration',
             'command.lighty:generator',
         ]);
     }

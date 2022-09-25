@@ -68,8 +68,8 @@ final class Generator extends BaseCommand
         ]);
 
         if ($this->option('migration')) {
-            $this->call('make:migration', [
-                'name' => "create_" . helper_string_plural(helper_string_snake($model_name)) . "_table",
+            $this->call('lighty:generate-migration', [
+                'table' => helper_string_plural(helper_string_snake($model_name)),
             ]);
         }
 
