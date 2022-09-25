@@ -1411,16 +1411,16 @@
         },
         {
             "name": "khazhinov/php-support",
-            "version": "1.0.2",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Khazhinov/php-support.git",
-                "reference": "af6775d66ababc66d548f6c5495b2e295d425e5d"
+                "reference": "c9e0b2ff47a77bc194ae3e932a42b720c139c3a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Khazhinov/php-support/zipball/af6775d66ababc66d548f6c5495b2e295d425e5d",
-                "reference": "af6775d66ababc66d548f6c5495b2e295d425e5d",
+                "url": "https://api.github.com/repos/Khazhinov/php-support/zipball/c9e0b2ff47a77bc194ae3e932a42b720c139c3a7",
+                "reference": "c9e0b2ff47a77bc194ae3e932a42b720c139c3a7",
                 "shasum": ""
             },
             "require": {
@@ -1462,9 +1462,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Khazhinov/php-support/issues",
-                "source": "https://github.com/Khazhinov/php-support/tree/1.0.2"
+                "source": "https://github.com/Khazhinov/php-support/tree/1.0.3"
             },
-            "time": "2022-09-25T14:15:25+00:00"
+            "time": "2022-09-25T15:31:24+00:00"
         },
         {
             "name": "laravel/framework",
