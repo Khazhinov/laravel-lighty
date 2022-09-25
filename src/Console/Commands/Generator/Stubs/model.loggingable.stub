@@ -11,7 +11,7 @@ use Khazhinov\LaravelLighty\Models\ModelLoggingable;
 /**
  * App\Models\{{ model_name }}
  *
- * @property string|null $id Уникальный идентификатор действия
+ * @property string|null $id Уникальный идентификатор
  * @property string $created_by Идентификатор пользователя, создавшего запись
  * @property string|null $updated_by Идентификатор пользователя, создавшего запись
  * @property string|null $deleted_by Идентификатор пользователя, создавшего запись
