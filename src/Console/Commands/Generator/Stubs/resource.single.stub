@@ -27,6 +27,7 @@ class {{ resource_name }} extends SingleResource
     {
         return [
             'id' => $this->resource->id,
+            'name' => $this->resource->name,
 
             // Для сложных полей, вычисление которых занимает большое время
             $this->mergeWhenByClosure($this->hasWith('properties.test'), static function ($context) {

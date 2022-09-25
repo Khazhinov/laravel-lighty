@@ -11,7 +11,11 @@ final class {{ request_name }} extends BaseRequest
     public function rules()
     {
         return [
-            //
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
         ];
     }
 }
