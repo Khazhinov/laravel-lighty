@@ -42,15 +42,15 @@ class IndexActionComplex extends ComplexFactory
                         Schema::array('filter')->items(
                             Schema::object('')->properties(
                                 Schema::string('column')
-                                    ->enum($model_reflector->getFlattenModelProperties($arguments->model_class))
+                                    ->enum(...$model_reflector->getFlattenModelProperties($arguments->model_class))
                                     ->description('Столбец сущности, по которому необходимо осуществить поиск')
                                     ->default($model_reflector->getFlattenModelProperties($arguments->model_class)[0]),
                                 Schema::string('operator')
-                                    ->enum($operator_enum_values)
+                                    ->enum(...$operator_enum_values)
                                     ->description('Столбец сущности, по которому необходимо осуществить поиск')
                                     ->default('='),
                                 Schema::string('boolean')
-                                    ->enum(['and', 'or'])
+                                    ->enum(...['and', 'or'])
                                     ->description('Логическая операция склеивания')
                                     ->default('and'),
                                 Schema::string('value')
