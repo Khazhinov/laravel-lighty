@@ -14,7 +14,7 @@
 Для установки данной библиотеки требуется использование Composer:
 
 ```bash
-composer require "khazhinov/laravel-lighty:^1.6"
+composer require "khazhinov/laravel-lighty:^1.7 -W"
 ```
 
 При необходимости опубликуйте файл конфигурации:
