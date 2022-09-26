@@ -13,6 +13,7 @@ use JsonException;
 use Khazhinov\LaravelLighty\Http\Resources\CollectionResource;
 use Khazhinov\LaravelLighty\Http\Resources\SingleResource;
 use Khazhinov\LaravelLighty\OpenApi\Complexes\Reflector\DTO\ModelPropertyDTO;
+use Khazhinov\LaravelLighty\OpenApi\Complexes\Reflector\DTO\ResourceAdditionsDTO;
 use phpDocumentor\Reflection\DocBlock\Tags\Property;
 use phpDocumentor\Reflection\DocBlock\Tags\PropertyRead;
 use phpDocumentor\Reflection\DocBlockFactory;
@@ -33,6 +34,41 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 class ModelReflector
 {
+    /**
+     * @param  string  $model_class
+     * @param  string  $collection_resource
+     * @return ResourceAdditionsDTO
+     * @throws JsonException
+     * @throws ReflectionException
+     * @throws UnknownProperties
+     */
+    public function getResourceAdditions(string $model_class, string $collection_resource): ResourceAdditionsDTO
+    {
+        if (! is_a($model_class, Model::class, true)) {
+            throw new RuntimeException(sprintf('Полученный класс модели (%s) не имеет родительского класса %s', $model_class, Model::class));
+        }
+
+        if (! is_a($collection_resource, CollectionResource::class, true)) {
+            throw new RuntimeException(sprintf('Полученный класс (%s) не имеет родительского класса %s', $model_class, CollectionResource::class));
+        }
+
+        $model = new $model_class();
+        // Получаем вектор полей модели с приведением к скалярному типу
+        $model_properties = $this->getModelProperties($model);
+        // Получаем фейковый класс модели для передачи в ресурс
+        $fluent_model = $this->getModelFluentByProperties($model_properties);
+        // Формируем класс ресурса коллекции
+        $collection = new $collection_resource([]);
+        $collection::$from_collection = false;
+        // Получаем класс ресурса единичного элемента коллекции
+        /** @var SingleResource $single */
+        $single = new $collection->collects($fluent_model, true);
+        // Прогоняем фейковый класс модели через ресурс единичного элемента коллекции, чтобы получить дополнения
+        $single_result = json_decode($single->toResponse(\request())->content(), true, 512, JSON_THROW_ON_ERROR);
+
+        return new ResourceAdditionsDTO($single->additions);
+    }
+
     /**
      * @param  string  $model_class
      * @param  string  $single_resource

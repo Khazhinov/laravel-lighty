@@ -28,6 +28,7 @@ class IndexActionComplex extends ComplexFactory
         $model_reflector = new ModelReflector();
         $complex_result = new ComplexFactoryResult();
         $complex_result->parameters = [];
+        $additions = $model_reflector->getResourceAdditions($arguments->model_class, $arguments->collection_resource);
 
         if ($arguments->options->filters->enable) {
             $operator_enum_cases = IndexActionRequestPayloadFilterOperatorEnum::cases();
@@ -56,7 +57,26 @@ class IndexActionComplex extends ComplexFactory
                                 Schema::string('value')
                                     ->description('Значение поля. Может быть массивом значений.'),
                             ),
-                        ),
+                        )->description('Массив фильтров'),
+                        Schema::object('with')->properties(
+                            Schema::array('relationships')->items(
+                                Schema::string()->enum(...$additions->relationships)->description('Название отношения'),
+                            )->description('Список отношений, требуемых к выгрузке в ответе коллекции'),
+                            Schema::array('properties')->items(
+                                Schema::string()->enum(...$additions->properties)->description('Название свойства'),
+                            )->description('Список свойств, требуемых к выгрузке в ответе коллекции'),
+                        )->description('Объект отношений или свойств, требуемых к демонстрации в ответе коллекции'),
+                        Schema::array('export')->items(
+                            Schema::object('')->properties(
+                                Schema::string('column')
+                                    ->enum(...$model_reflector->getFlattenModelProperties($arguments->model_class))
+                                    ->description('Столбец сущности для экспорта')
+                                    ->default($model_reflector->getFlattenModelProperties($arguments->model_class)[0]),
+                                Schema::string('alias')
+                                    ->description('Название столбца в результирующей таблице')
+                                    ->default('Некое название'),
+                            ),
+                        )->description('Массив столбцов для экспорта. Преобразует ответ в xlsx файл с сохранением всех установленных ограничений.'),
                     )
                 ),
             );

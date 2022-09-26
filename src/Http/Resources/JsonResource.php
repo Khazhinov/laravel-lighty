@@ -19,6 +19,13 @@ abstract class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
 {
     public static bool $from_collection;
     public static bool $force_is_parent = false;
+    /**
+     * @var array<string, array<string>>
+     */
+    public array $additions = [
+        'properties' => [],
+        'relationships' => [],
+    ];
 
     public bool $is_parent = false;
 
@@ -60,6 +67,7 @@ abstract class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
     {
         $key_array = explode('.', $key);
         if ($key_array[0] === 'properties') {
+            $this->additions['properties'][] = $key_array[1];
             if ($this->is_parent) {
                 if ($force_has_with) {
                     return $this->hasWithInRequest($key);
@@ -72,6 +80,7 @@ abstract class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
         }
 
         if ($key_array[0] === 'relationships') {
+            $this->additions['relationships'][] = $key_array[1];
             if ($this->is_parent) {
                 if ($force_has_with) {
                     return $this->hasWithInRequest($key);
