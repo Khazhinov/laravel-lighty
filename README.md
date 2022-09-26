@@ -1,7 +1,7 @@
 
 <p align="center"><img src="/art/header.jpg" alt="Social Card of Laravel Lighty"></p>
 
-# Laravel Lighty
+# Laravel Lighty ⚡️
 
 Набор инструментов для быстрого создания CRUD REST API
 
