@@ -165,6 +165,10 @@ class RequestReflector
         $schema_properties = [];
 
         if (is_null($request_properties)) {
+            $schema_properties[] = Schema::string('any_custom_data')
+                ->nullable(true)
+                ->description('В теле родителя может быть указано что угодно')
+            ;
             return $schema_properties;
         }
 
