@@ -14,7 +14,7 @@ class ErrorResponse
 {
     public static function build(
         ?SchemaContract $error = null,
-        string $response_description = 'Успешный ответ',
+        string $response_description = 'Ответ с ошибкой',
         string $error_type = 'object',
         int $code = 400,
         string $message = 'Bad Request',
