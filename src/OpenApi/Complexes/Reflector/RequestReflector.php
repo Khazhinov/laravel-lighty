@@ -157,12 +157,16 @@ class RequestReflector
     }
 
     /**
-     * @param  array<string, RequestPropertyDTO>  $request_properties
+     * @param  null|array<string, RequestPropertyDTO>  $request_properties
      * @return SchemaContract[]
      */
-    protected function makeSchemaProperties(array $request_properties): array
+    protected function makeSchemaProperties(?array $request_properties): array
     {
         $schema_properties = [];
+
+        if (is_null($request_properties)) {
+            return $schema_properties;
+        }
 
         foreach ($request_properties as $property_name => $property_body) {
             $schema_type = $property_body->type->value;
