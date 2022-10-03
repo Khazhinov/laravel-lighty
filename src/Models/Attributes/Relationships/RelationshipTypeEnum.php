@@ -8,5 +8,6 @@ enum RelationshipTypeEnum: string
 {
     case BelongsTo = 'belongs_to';
     case HasMany = 'has_many';
+    case HasOne = 'has_one';
     case BelongsToMany = 'belongs_to_many';
 }
