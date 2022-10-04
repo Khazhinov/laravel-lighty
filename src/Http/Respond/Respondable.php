@@ -13,13 +13,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 trait Respondable
 {
+    /**
+     * @throws \JsonException
+     */
     public function respond(ApiResponseDTO $action_response, Closure $closure = null): Response
     {
-        $serializer = $this->getSerializer();
-        $context = new SerializationContext();
-        $context->setSerializeNull(true);
+//        $serializer = $this->getSerializer();
+//        $context = new SerializationContext();
+//        $context->setSerializeNull(true);
 
-        $content = $serializer->serialize($action_response->buildResponseContent(), 'json', $context);
+        $content = json_encode($action_response->buildResponseContent(), JSON_THROW_ON_ERROR);
+//        $content = $serializer->serialize($action_response->buildResponseContent(), 'json', $context);
 
         $response = new Response($content, $this->normalizeStatusCode($action_response->code), $action_response->headers ?: []);
 
