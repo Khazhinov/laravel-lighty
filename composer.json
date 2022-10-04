@@ -28,7 +28,6 @@
     "illuminate/http": "^9",
     "illuminate/pipeline": "^9",
     "illuminate/support": "^9",
-    "jms/serializer": "*",
     "khazhinov/laravel-fly-docs": "^1.0",
     "khazhinov/php-support": "^1.0",
     "maatwebsite/excel": "^3.1",
