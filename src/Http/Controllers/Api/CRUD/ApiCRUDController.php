@@ -77,9 +77,9 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
     /**
      * Controller base model.
      *
-     * @var Model
+     * @var Model|Khazhinov\LaravelLightyMongoDBBundle\Models\Model
      */
-    protected Model $current_model;
+    protected $current_model;
 
     /**
      * Array of relationships.
@@ -101,9 +101,9 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
     /**
      * Set controller base model.
      *
-     * @param  Model|string  $current_model
+     * @param  Model|Khazhinov\LaravelLightyMongoDBBundle\Models\Model|string  $current_model
      */
-    protected function setCurrentModel(Model|string $current_model): void
+    protected function setCurrentModel(mixed $current_model): void
     {
         if (is_string($current_model)) {
             $current_model = new $current_model();
@@ -111,9 +111,18 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
 
         if (! is_a($current_model, Model::class, true)) {
             $tmp_class = $current_model::class;
-            $base_class = Model::class;
+            // MongoDB Bundle
+            if (class_exists('\Khazhinov\LaravelLightyMongoDBBundle\Models\Model')) {
+                if (! is_a($current_model, '\Khazhinov\LaravelLightyMongoDBBundle\Models\Model', true)) {
+                    $base_class = '\Khazhinov\LaravelLightyMongoDBBundle\Models\Model';
+                    throw new RuntimeException("Class $tmp_class must be inherited from class $base_class");
+                }
+            } else {
+                $base_class = Model::class;
+                throw new RuntimeException("Class $tmp_class must be inherited from class $base_class");
+            }
 
-            throw new RuntimeException("Class $tmp_class must be inherited from class $base_class");
+
         }
 
         $this->current_model = $current_model;
