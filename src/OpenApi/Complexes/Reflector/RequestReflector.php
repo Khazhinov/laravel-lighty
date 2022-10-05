@@ -169,6 +169,7 @@ class RequestReflector
                 ->nullable(true)
                 ->description('В теле родителя может быть указано что угодно')
             ;
+
             return $schema_properties;
         }
 

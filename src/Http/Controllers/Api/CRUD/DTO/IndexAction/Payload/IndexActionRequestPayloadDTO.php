@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload;
 
-use Khazhinov\PhpSupport\Enums\ScalarTypeEnum;
 use Khazhinov\PhpSupport\DTO\DataTransferObject;
 use Khazhinov\PhpSupport\DTO\Validation\ArrayOfScalar;
 use Khazhinov\PhpSupport\DTO\Validation\NumberBetween;
+use Khazhinov\PhpSupport\Enums\ScalarTypeEnum;
 use Spatie\DataTransferObject\Attributes\CastWith;
 use Spatie\DataTransferObject\Casters\ArrayCaster;
 

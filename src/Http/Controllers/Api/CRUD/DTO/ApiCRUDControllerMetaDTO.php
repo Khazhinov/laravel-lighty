@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO;
 
-use Khazhinov\PhpSupport\Enums\ScalarTypeEnum;
-use Khazhinov\LaravelLighty\Models\Model;
+use Illuminate\Database\Eloquent\Model;
 use Khazhinov\PhpSupport\DTO\DataTransferObject;
 use Khazhinov\PhpSupport\DTO\Validation\ArrayOfScalar;
 use Khazhinov\PhpSupport\DTO\Validation\ClassExists;
 use Khazhinov\PhpSupport\DTO\Validation\ExistsInParents;
+use Khazhinov\PhpSupport\Enums\ScalarTypeEnum;
 
 /**
  * Класс, описывающий необходимую конфигурацию CRUD абстракции

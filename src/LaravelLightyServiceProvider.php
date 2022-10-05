@@ -7,11 +7,11 @@ namespace Khazhinov\LaravelLighty;
 use Illuminate\Support\ServiceProvider;
 use Khazhinov\LaravelLighty\Console\Commands\Generator;
 use Khazhinov\LaravelLighty\Console\Commands\Generator\ControllerGenerator;
+use Khazhinov\LaravelLighty\Console\Commands\Generator\MigrationGenerator;
 use Khazhinov\LaravelLighty\Console\Commands\Generator\ModelGenerator;
 use Khazhinov\LaravelLighty\Console\Commands\Generator\RequestGenerator;
 use Khazhinov\LaravelLighty\Console\Commands\Generator\ResourceGenerator;
 use Khazhinov\LaravelLighty\Console\Commands\Generator\RouteGenerator;
-use Khazhinov\LaravelLighty\Console\Commands\Generator\MigrationGenerator;
 
 class LaravelLightyServiceProvider extends ServiceProvider
 {
