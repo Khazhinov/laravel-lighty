@@ -13,14 +13,16 @@ abstract class SingleResource extends JsonResource
     /**
      * @param $resource
      * @param  mixed  $is_parent
+     * @param  bool  $ignore_properties_if_parents
      */
-    public function __construct($resource, mixed $is_parent = false)
+    public function __construct($resource, mixed $is_parent = false, bool $ignore_properties_if_parents = false)
     {
         if (! is_bool($is_parent)) {
             $is_parent = false;
         }
 
         $this->is_parent = $is_parent;
+        $this->ignore_properties_if_parents = $ignore_properties_if_parents;
 
         parent::__construct($resource);
     }

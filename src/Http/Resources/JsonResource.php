@@ -28,6 +28,7 @@ abstract class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
     ];
 
     public bool $is_parent = false;
+    public bool $ignore_properties_if_parents = false;
 
     /**
      * Create a new resource instance.
@@ -69,6 +70,10 @@ abstract class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
         if ($key_array[0] === 'properties') {
             $this->additions['properties'][] = $key_array[1];
             if ($this->is_parent) {
+                if ($this->ignore_properties_if_parents) {
+                    return false;
+                }
+
                 if ($force_has_with) {
                     return $this->hasWithInRequest($key);
                 }

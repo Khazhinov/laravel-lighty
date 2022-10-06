@@ -56,13 +56,13 @@ class ModelReflector
         // Получаем вектор полей модели с приведением к скалярному типу
         $model_properties = $this->getModelProperties($model);
         // Получаем фейковый класс модели для передачи в ресурс
-        $fluent_model = $this->getModelFluentByProperties($model_properties);
+        $virtual_model = $this->getVirtualModelByProperties($model, $model_properties);
         // Формируем класс ресурса коллекции
         $collection = new $collection_resource([]);
         $collection::$from_collection = false;
         // Получаем класс ресурса единичного элемента коллекции
         /** @var SingleResource $single */
-        $single = new $collection->collects($fluent_model, true);
+        $single = new $collection->collects($virtual_model, true, true);
         // Прогоняем фейковый класс модели через ресурс единичного элемента коллекции, чтобы получить дополнения
         $single_result = json_decode($single->toResponse(\request())->content(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -91,10 +91,10 @@ class ModelReflector
         // Получаем вектор полей модели с приведением к скалярному типу
         $model_properties = $this->getModelProperties($model);
         // Получаем фейковый класс модели для передачи в ресурс
-        $fluent_model = $this->getModelFluentByProperties($model_properties);
+        $virtual_model = $this->getVirtualModelByProperties($model, $model_properties);
         // Формируем класс единичного ресурса
         /** @var SingleResource $single */
-        $single = new $single_resource($fluent_model, true);
+        $single = new $single_resource($virtual_model, true, true);
         // Прогоняем фейковый класс модели через ресурс единичного элемента коллекции
         $single_result = json_decode($single->toResponse(\request())->content(), true, 512, JSON_THROW_ON_ERROR);
         // Избавляемся от врапинга, в случае его наличия
@@ -124,13 +124,13 @@ class ModelReflector
         // Получаем вектор полей модели с приведением к скалярному типу
         $model_properties = $this->getModelProperties($model);
         // Получаем фейковый класс модели для передачи в ресурс
-        $fluent_model = $this->getModelFluentByProperties($model_properties);
+        $virtual_model = $this->getVirtualModelByProperties($model, $model_properties);
         // Формируем класс ресурса коллекции
         $collection = new $collection_resource([]);
         $collection::$from_collection = false;
         // Получаем класс ресурса единичного элемента коллекции
         /** @var SingleResource $single */
-        $single = new $collection->collects($fluent_model, true);
+        $single = new $collection->collects($virtual_model, true, true);
         // Прогоняем фейковый класс модели через ресурс единичного элемента коллекции
         $single_result = json_decode($single->toResponse(\request())->content(), true, 512, JSON_THROW_ON_ERROR);
         // Избавляемся от врапинга, в случае его наличия
@@ -388,23 +388,26 @@ class ModelReflector
     }
 
     /**
+     * @param  Model  $source_model
      * @param  ModelPropertyDTO[]  $properties
-     * @return Fluent
+     * @return VirtualModel
      */
-    protected function getModelFluentByProperties(array $properties): Fluent
+    protected function getVirtualModelByProperties(Model $source_model, array $properties): VirtualModel
     {
         $result_properties = [];
         foreach ($properties as $property) {
             switch ($property->type) {
                 case SchemeTypeEnum::Collection:
-                    $fluent_related_model = $this->getModelFluentByProperties($property->related_properties);
+                    $related_source_model = new $property->related();
+                    $virtual_related_model = $this->getVirtualModelByProperties($related_source_model, $property->related_properties);
                     $collection = new Collection();
-                    $collection = $collection->push($fluent_related_model);
+                    $collection = $collection->push($virtual_related_model);
                     $result_properties[$property->name] = $collection;
 
                     break;
                 case SchemeTypeEnum::Single:
-                    $result_properties[$property->name] = $this->getModelFluentByProperties($property->related_properties);
+                    $related_source_model = new $property->related();
+                    $result_properties[$property->name] = $this->getVirtualModelByProperties($related_source_model, $property->related_properties);
 
                     break;
                 default:
@@ -414,6 +417,6 @@ class ModelReflector
             }
         }
 
-        return new Fluent($result_properties);
+        return new VirtualModel($source_model, $result_properties);
     }
 }
