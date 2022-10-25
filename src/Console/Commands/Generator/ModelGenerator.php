@@ -24,7 +24,7 @@ final class ModelGenerator extends BaseGenerator
      */
     protected $signature = "lighty:generate-model 
                             {model_name : Название модели. Используйте слэш (/) для вложенности.}
-                            {--type=loggingable : Тип модели - l|loggingable or a|authenticatable}";
+                            {--type=base : Тип модели - l|loggingable, a|authenticatable, b|base}";
 
     /**
      * The console command description.
@@ -39,6 +39,7 @@ final class ModelGenerator extends BaseGenerator
     private array $available_stubs = [
         'authenticatable' => 'model.authenticatable.stub',
         'loggingable' => 'model.loggingable.stub',
+        'base' => 'model.base.stub',
     ];
 
     private string $current_stub;
@@ -95,6 +96,16 @@ final class ModelGenerator extends BaseGenerator
                 $this->current_stub = __DIR__ . DIRECTORY_SEPARATOR . 'Stubs' . DIRECTORY_SEPARATOR . $this->available_stubs['authenticatable'];
                 if (! file_exists($this->current_stub)) {
                     $this->output->warning('Заготовка модели вида Authenticatable не найдена.');
+
+                    return false;
+                }
+
+                return true;
+            case 'b':
+            case 'base':
+                $this->current_stub = __DIR__ . DIRECTORY_SEPARATOR . 'Stubs' . DIRECTORY_SEPARATOR . $this->available_stubs['base'];
+                if (! file_exists($this->current_stub)) {
+                    $this->output->warning('Заготовка модели вида Base не найдена.');
 
                     return false;
                 }

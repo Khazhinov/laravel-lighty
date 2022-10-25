@@ -4,62 +4,30 @@ namespace {{ model_namespace }};
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Khazhinov\LaravelLighty\Models\Attributes\Relationships\Relationship;
 use Khazhinov\LaravelLighty\Models\Attributes\Relationships\RelationshipTypeEnum;
-use Khazhinov\LaravelLighty\Models\AuthenticatableModel;
+use Khazhinov\LaravelLighty\Models\Model;
 use Khazhinov\LaravelLighty\Models\UUID\Uuidable;
 use Khazhinov\LaravelLighty\Models\UUID\UuidableContract;
 
 /**
  * App\Models\{{ model_name }}
  *
- * @property string|null $id Уникальный идентификатор пользователя
- * @property string $name Имя
- * @property string $email Email
- * @property \Illuminate\Support\Carbon|null $email_verified_at Временная метка подтверждения почты
+ * @property string|null $id Уникальный идентификатор
+ * @property string $name Наименование
  * @property \Illuminate\Support\Carbon|null $created_at Временная метка создания записи
  * @property \Illuminate\Support\Carbon|null $updated_at Временная метка изменения записи
  * @property \Illuminate\Support\Carbon|null $deleted_at Временная метка удаления записи
  */
-final class {{ model_name }} extends AuthenticatableModel implements UuidableContract
+final class {{ model_name }} extends Model implements UuidableContract
 {
     use Uuidable;
-    use HasApiTokens;
     use HasFactory;
-    use Notifiable;
     use SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
-        'email',
-        'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
     ];
 
 //    #[

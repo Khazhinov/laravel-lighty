@@ -12,7 +12,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 
-abstract class AuthenticatableModel extends ModelLoggingable implements
+abstract class AuthenticatableModel extends Model implements
     AuthenticatableContract,
     AuthorizableContract,
     CanResetPasswordContract

@@ -7,6 +7,7 @@ namespace Khazhinov\LaravelLighty\Models;
 use Illuminate\Database\Eloquent\Model as ModelBase;
 use Khazhinov\LaravelLighty\Models\Attributes\Relationships\Relationship;
 use Khazhinov\LaravelLighty\Models\Attributes\Relationships\RelationshipDTO;
+use Khazhinov\LaravelLighty\Models\UUID\UuidableContract;
 use ReflectionException;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
@@ -15,6 +16,22 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
  */
 abstract class Model extends ModelBase
 {
+    /**
+     * @return void
+     */
+    public static function boot(): void
+    {
+        static::creating(static function ($instance) {
+            /** @var Model $instance */
+            if (is_a($instance, UuidableContract::class, true)) {
+                if (! $instance->{$instance->getKeyName()}) {
+                    $instance->{$instance->getKeyName()} = $instance->generateUuid();
+                }
+            }
+        });
+
+        parent::boot();
+    }
     /**
      * @var array<string, array<string, mixed>>
      */
