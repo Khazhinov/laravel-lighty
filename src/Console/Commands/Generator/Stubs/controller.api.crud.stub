@@ -262,6 +262,9 @@ final class {{ controller_name }} extends ApiCRUDController
      */
     protected function getQueryBuilder(): Builder|DatabaseBuilder
     {
-        return {{ model_name }}::query();
+        /** @var Builder|DatabaseBuilder $builder */
+        $builder = {{ model_name }}::query()
+
+        return $builder;
     }
 }
