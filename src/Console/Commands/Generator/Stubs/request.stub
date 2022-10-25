@@ -8,7 +8,10 @@ use Khazhinov\LaravelLighty\Http\Requests\BaseRequest;
 
 final class {{ request_name }} extends BaseRequest
 {
-    public function rules()
+    /**
+     * @return array<string, mixed>
+     */
+    public function rules(): array
     {
         return [
             'name' => [
