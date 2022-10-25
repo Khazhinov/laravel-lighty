@@ -89,14 +89,17 @@ final class RouteGenerator extends BaseCommand
         $api_version = $this->option('api-version');
 
         if ($api_version) {
-            $data = str_ireplace("{{ comment_route_path }}", $api_version . '/' . helper_string_plural(lcfirst($model_name)), $data);
-            $data = str_ireplace("{{ route_path }}", helper_string_plural(lcfirst($model_name)), $data);
+            $data = str_ireplace("{{ comment_route_path }}", $api_version . '/' . (string) helper_string_plural(lcfirst($model_name)), $data);
+            /** @var string $data */
+            $data = str_ireplace("{{ route_path }}", (string) helper_string_plural(lcfirst($model_name)), $data);
         } else {
-            $data = str_ireplace("{{ comment_route_path }}", helper_string_plural(lcfirst($model_name)), $data);
-            $data = str_ireplace("{{ route_path }}", helper_string_plural(lcfirst($model_name)), $data);
+            /** @var string $data */
+            $data = str_ireplace("{{ comment_route_path }}", (string) helper_string_plural(lcfirst($model_name)), $data);
+            /** @var string $data */
+            $data = str_ireplace("{{ route_path }}", (string) helper_string_plural(lcfirst($model_name)), $data);
         }
 
-        $data = str_ireplace("{{ route_path_snake }}", helper_string_snake(helper_string_plural($model_name)), $data);
+        $data = str_ireplace("{{ route_path_snake }}", helper_string_snake((string) helper_string_plural($model_name)), $data);
         $data = str_ireplace("{{ model_class }}", $model_name, $data);
         $data = str_ireplace("{{ controller_name }}", "{$model_name}CRUDController", $data);
 

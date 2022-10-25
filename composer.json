@@ -64,6 +64,6 @@
   },
   "scripts": {
     "analyse": "vendor/bin/phpstan analyse --configuration phpstan.neon",
-    "format": "vendor/bin/php-cs-fixer fix --config .php_cs.dist.php --allow-risky=yes"
+    "format": "vendor/bin/php-cs-fixer fix --config cs_dist.php --allow-risky=yes"
   }
 }

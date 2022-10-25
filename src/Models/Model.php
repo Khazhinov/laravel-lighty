@@ -7,46 +7,18 @@ namespace Khazhinov\LaravelLighty\Models;
 use Illuminate\Database\Eloquent\Model as ModelBase;
 use Khazhinov\LaravelLighty\Models\Attributes\Relationships\Relationship;
 use Khazhinov\LaravelLighty\Models\Attributes\Relationships\RelationshipDTO;
-use Khazhinov\LaravelLighty\Models\UUID\Uuidable;
-use Khazhinov\LaravelLighty\Models\UUID\UuidableContract;
 use ReflectionException;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 
 /**
  * Базовая абстракция модели.
- * Подразумевается, что все сущности будут использовать в качестве primary key тип UUID.
- *
- * @see https://en.wikipedia.org/wiki/Universally_unique_identifier
  */
-abstract class Model extends ModelBase implements UuidableContract
+abstract class Model extends ModelBase
 {
-    use Uuidable;
-
-    public $incrementing = false;
-
     /**
      * @var array<string, array<string, mixed>>
      */
     protected array $relations_aliases = [];
-
-    public static function boot(): void
-    {
-        parent::boot();
-
-        static::creating(static function ($instance) {
-            if (! $instance->{$instance->getKeyName()}) {
-                $instance->{$instance->getKeyName()} = $instance->generateUuid();
-            }
-        });
-
-        static::updating(static function ($instance) {
-            // ...
-        });
-
-        static::deleting(static function ($instance) {
-            // ...
-        });
-    }
 
     public function getModelName(): bool|string
     {
@@ -138,25 +110,5 @@ abstract class Model extends ModelBase implements UuidableContract
         $name = class_basename($this);
 
         return helper_string_snake($name);
-    }
-
-    /**
-     * Get the value indicating whether the IDs are incrementing.
-     *
-     * @return bool
-     */
-    public function getIncrementing(): bool
-    {
-        return false;
-    }
-
-    /**
-     * Get the auto-incrementing key type.
-     *
-     * @return string
-     */
-    public function getKeyType(): string
-    {
-        return 'string';
     }
 }

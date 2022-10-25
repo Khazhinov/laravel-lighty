@@ -8,7 +8,6 @@ use GoldSpecDigital\ObjectOrientedOAS\Contracts\SchemaContract;
 use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Fluent;
 use JsonException;
 use Khazhinov\LaravelLighty\Http\Resources\CollectionResource;
 use Khazhinov\LaravelLighty\Http\Resources\SingleResource;
@@ -398,7 +397,9 @@ class ModelReflector
         foreach ($properties as $property) {
             switch ($property->type) {
                 case SchemeTypeEnum::Collection:
+                    /** @var Model $related_source_model */
                     $related_source_model = new $property->related();
+                    /** @var Model $virtual_related_model */
                     $virtual_related_model = $this->getVirtualModelByProperties($related_source_model, $property->related_properties);
                     $collection = new Collection();
                     $collection = $collection->push($virtual_related_model);
@@ -406,6 +407,7 @@ class ModelReflector
 
                     break;
                 case SchemeTypeEnum::Single:
+                    /** @var Model $related_source_model */
                     $related_source_model = new $property->related();
                     $result_properties[$property->name] = $this->getVirtualModelByProperties($related_source_model, $property->related_properties);
 

@@ -7,18 +7,23 @@ namespace Khazhinov\LaravelLighty\Models;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Khazhinov\LaravelLighty\Models\UUID\Uuidable;
+use Khazhinov\LaravelLighty\Models\UUID\UuidableContract;
 use Khazhinov\LaravelLighty\Services\SystemUserPayloadService;
 
 /**
- * Class ModelLoggingable
- * The class provides a centralized logging mechanism.
- * A model inherited from this class must have the following attributes:
+ * Базовый класс модели
+ * Подразумевается, что все сущности данного типа будут использовать в качестве primary key тип UUID.
+ * @see https://en.wikipedia.org/wiki/Universally_unique_identifier
+ *
+ * Все модели, унаследованные от данного класса, должны иметь следующие поля:
  * Timestamp: created_at, updated_at, deleted_at
- * UUID (with a foreign key to the users table): created_by, updated_by, deleted_by
+ * UUID: created_by, updated_by, deleted_by
  */
-abstract class ModelLoggingable extends Model
+abstract class ModelLoggingable extends Model implements UuidableContract
 {
     use SoftDeletes;
+    use Uuidable;
 
     public $timestamps = false;
 
@@ -28,6 +33,10 @@ abstract class ModelLoggingable extends Model
     public static function boot(): void
     {
         static::creating(static function ($instance) {
+            if (! $instance->{$instance->getKeyName()}) {
+                $instance->{$instance->getKeyName()} = $instance->generateUuid();
+            }
+
             $instance->created_at = now();
 
             if (! $instance->created_by) {

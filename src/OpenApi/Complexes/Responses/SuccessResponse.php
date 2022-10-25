@@ -43,12 +43,14 @@ class SuccessResponse
 
         switch ($data_type) {
             case 'array':
+                /** @var SchemaContract $data */
                 $properties[] = Schema::array('data')->items(
                     $data,
                 );
 
                 break;
             case 'object':
+                /** @var SchemaContract[] $data */
                 $properties[] = Schema::object('data')->properties(
                     ...$data,
                 );

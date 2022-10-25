@@ -94,9 +94,10 @@ final class MigrationGenerator extends BaseCommand
         /** @var string $data */
         $data = @file_get_contents($this->current_stub);
 
-        /** @var string $model_name */
+        /** @var string $table */
         $table = $this->argument('table');
 
+        /** @var string $data */
         $data = str_ireplace("{{ table }}", $table, $data);
 
         return $data;

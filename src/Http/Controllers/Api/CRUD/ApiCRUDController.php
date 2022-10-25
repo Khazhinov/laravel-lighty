@@ -77,7 +77,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
     /**
      * Controller base model.
      *
-     * @var Model|Khazhinov\LaravelLightyMongoDBBundle\Models\Model
+     * @var Model|\Khazhinov\LaravelLightyMongoDBBundle\Models\Model
      */
     protected $current_model;
 
@@ -101,7 +101,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
     /**
      * Set controller base model.
      *
-     * @param  Model|Khazhinov\LaravelLightyMongoDBBundle\Models\Model|string  $current_model
+     * @param  Model|\Khazhinov\LaravelLightyMongoDBBundle\Models\Model|string  $current_model
      */
     protected function setCurrentModel(mixed $current_model): void
     {
@@ -115,14 +115,14 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             if (class_exists('\Khazhinov\LaravelLightyMongoDBBundle\Models\Model')) {
                 if (! is_a($current_model, '\Khazhinov\LaravelLightyMongoDBBundle\Models\Model', true)) {
                     $base_class = '\Khazhinov\LaravelLightyMongoDBBundle\Models\Model';
+
                     throw new RuntimeException("Class $tmp_class must be inherited from class $base_class");
                 }
             } else {
                 $base_class = Model::class;
+
                 throw new RuntimeException("Class $tmp_class must be inherited from class $base_class");
             }
-
-
         }
 
         $this->current_model = $current_model;
@@ -491,7 +491,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
         $model_name = class_basename($this->current_model);
         $date = now()->format('_Y-M-d');
 
-        return helper_string_ucfirst(helper_string_plural(helper_string_snake($model_name))).$date.'.'.$return_type;
+        return helper_string_ucfirst((string) helper_string_plural((string) helper_string_snake($model_name))).$date.'.'.$return_type;
     }
 
     /**

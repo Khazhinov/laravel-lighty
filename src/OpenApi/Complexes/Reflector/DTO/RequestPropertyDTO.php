@@ -16,6 +16,7 @@ class RequestPropertyDTO extends DataTransferObject
     public bool $required = false;
     public bool $nullable = false;
     public bool $sometimes = false;
+    /** @var array<mixed>|null */
     public ?array $child = null;
 
     #[CastWith(EnumCaster::class, enumType: SchemeTypeEnum::class)]

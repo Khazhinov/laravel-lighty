@@ -1,6 +1,8 @@
 parameters:
     level: 8
     checkGenericClassInNonGenericObjectType: false
+    bootstrapFiles:
+        - bundles.php
     paths:
         - ./config
         - ./src
