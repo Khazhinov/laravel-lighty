@@ -17,7 +17,7 @@ class SystemUserPayloadService
 
     private static string $system_password = 'Ysj7hYgZgi';
 
-    public static function getSystemUserId(): string
+    public static function getSystemUserId(): mixed
     {
         $user_class = config('auth.providers.users.model');
         /** @var User $user_model */
