@@ -7,8 +7,6 @@ namespace Khazhinov\LaravelLighty\Models;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
-use Khazhinov\LaravelLighty\Models\UUID\Uuidable;
-use Khazhinov\LaravelLighty\Models\UUID\UuidableContract;
 use Khazhinov\LaravelLighty\Services\SystemUserPayloadService;
 
 /**
