@@ -13,17 +13,14 @@ use Khazhinov\LaravelLighty\Services\SystemUserPayloadService;
 
 /**
  * Базовый класс модели
- * Подразумевается, что все сущности данного типа будут использовать в качестве primary key тип UUID.
- * @see https://en.wikipedia.org/wiki/Universally_unique_identifier
  *
  * Все модели, унаследованные от данного класса, должны иметь следующие поля:
  * Timestamp: created_at, updated_at, deleted_at
- * UUID: created_by, updated_by, deleted_by
+ * ID: created_by, updated_by, deleted_by
  */
-abstract class ModelLoggingable extends Model implements UuidableContract
+abstract class ModelLoggingable extends Model
 {
     use SoftDeletes;
-    use Uuidable;
 
     public $timestamps = false;
 
@@ -33,10 +30,6 @@ abstract class ModelLoggingable extends Model implements UuidableContract
     public static function boot(): void
     {
         static::creating(static function ($instance) {
-            if (! $instance->{$instance->getKeyName()}) {
-                $instance->{$instance->getKeyName()} = $instance->generateUuid();
-            }
-
             $instance->created_at = now();
 
             if (! $instance->created_by) {
