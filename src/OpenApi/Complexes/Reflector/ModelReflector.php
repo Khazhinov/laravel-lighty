@@ -276,7 +276,13 @@ class ModelReflector
 
                 // Если выгружается отношение, то требуется получить список его полей БЕЗ его отношений
                 if ($related) {
-                    $property_body['related_properties'] = $this->getModelProperties(new $related(), false);
+                    $related = new $related();
+                    $related_reflector = new ReflectionClass($related);
+                    $related_namespace = $related_reflector->getNamespaceName();
+                    // Не инспектируем модели вне основного пространства имён
+                    if (str_starts_with($related_namespace, 'App')) {
+                        $property_body['related_properties'] = $this->getModelProperties(new $related(), false);
+                    }
                 }
 
                 $property = new ModelPropertyDTO($property_body);
