@@ -20,5 +20,4 @@ abstract class AuthenticatableModel extends Model implements
     use Authenticatable;
     use Authorizable;
     use CanResetPassword;
-    use MustVerifyEmail;
 }
