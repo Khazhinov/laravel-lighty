@@ -42,6 +42,13 @@ class IndexActionComplex extends ComplexFactory
                     Schema::object('')->properties(
                         Schema::array('filter')->items(
                             Schema::object('')->properties(
+                                Schema::string('type')
+                                    ->enum(['single', 'group'])
+                                    ->description('Тип объекта фильтра')
+                                    ->default('single'),
+                                Schema::array('group')
+                                    ->items(Schema::object('')->description('Массив фильтров'))
+                                    ->description('Массив фильтров в группе'),
                                 Schema::string('column')
                                     ->enum(...$model_reflector->getFlattenModelProperties($arguments->model_class))
                                     ->description('Столбец сущности, по которому необходимо осуществить поиск')
@@ -57,7 +64,28 @@ class IndexActionComplex extends ComplexFactory
                                 Schema::string('value')
                                     ->description('Значение поля. Может быть массивом значений.'),
                             ),
-                        )->description('Массив фильтров'),
+                        )
+                            ->description('Массив фильтров')
+                            ->example([
+                                [
+                                    'column' => $model_reflector->getFlattenModelProperties($arguments->model_class)[0],
+                                    'value' => 'test'
+                                ],
+                                [
+                                    'type' => 'group',
+                                    'group' => [
+                                        [
+                                            'column' => $model_reflector->getFlattenModelProperties($arguments->model_class)[0],
+                                            'value' => 'test'
+                                        ],
+                                        [
+                                            'column' => $model_reflector->getFlattenModelProperties($arguments->model_class)[0],
+                                            'value' => 'test',
+                                            'boolean' => 'or'
+                                        ],
+                                    ]
+                                ]
+                            ]),
                         Schema::object('with')->properties(
                             Schema::array('relationships')->items(
                                 Schema::string()->enum(...$additions->relationships)->description('Название отношения'),
