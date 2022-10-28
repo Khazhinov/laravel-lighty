@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Http\Resources;
 
@@ -178,7 +178,6 @@ abstract class CollectionResource extends JsonResource implements Countable, Ite
             throw new RuntimeException('Cannot read single resource class');
         }
     }
-
 
     /**
      * Indicate that all current query parameters should be appended to pagination links.

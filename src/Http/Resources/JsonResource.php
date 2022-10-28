@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Http\Resources;
 
@@ -19,6 +19,7 @@ abstract class JsonResource extends \Illuminate\Http\Resources\Json\JsonResource
 {
     public static bool $from_collection;
     public static bool $force_is_parent = false;
+
     /**
      * @var array<string, array<string>>
      */

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD;
 
@@ -27,7 +27,9 @@ use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\DestroyAction\Option\D
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option\IndexActionOptionsDTO;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option\IndexActionOptionsReturnTypeEnum;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadDTO;
+use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadFilterBooleanEnum;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadFilterDTO;
+use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadFilterTypeEnum;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\SetPositionAction\Option\SetPositionActionOptionsDTO;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\SetPositionAction\Payload\SetPositionActionRequestPayloadDTO;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\ShowAction\Option\ShowActionOptionsDTO;
@@ -314,15 +316,20 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
     {
         if ($options->enable) {
             $column = $this->current_model->getTable().'.'.$options->column;
+
             switch ($options->mode) {
                 case ActionOptionsDeletedModeEnum::WithoutTrashed:
-                    $builder = $builder->whereNull($column);
+                    $builder = $builder->where(static function (Builder|DatabaseBuilder $builder) use ($column) {
+                        $builder->whereNull($column);
+                    });
 
                     break;
                 case ActionOptionsDeletedModeEnum::WithTrashed:
                     break;
                 case ActionOptionsDeletedModeEnum::OnlyTrashed:
-                    $builder = $builder->whereNotNull($column);
+                    $builder = $builder->where(static function (Builder|DatabaseBuilder $builder) use ($column) {
+                        $builder->whereNotNull($column);
+                    });
 
                     break;
             }
@@ -339,8 +346,12 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
      */
     protected function addFilters(IndexActionOptionsDTO $options, array $filters, Builder|DatabaseBuilder $builder): Builder|DatabaseBuilder
     {
-        foreach ($filters as $filter) {
-            $builder = $this->addFilter($options, $builder, $filter);
+        if (count($filters)) {
+            $builder = $builder->where(function (Builder|DatabaseBuilder $builder) use ($options, $filters) {
+                foreach ($filters as $filter) {
+                    $builder = $this->addFilter($options, $builder, $filter);
+                }
+            });
         }
 
         return $builder;
@@ -359,7 +370,27 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             return $builder;
         }
 
+        if ($filter->type === IndexActionRequestPayloadFilterTypeEnum::Group) {
+            $inside_function = function (Builder|DatabaseBuilder $builder) use ($options, $filter) {
+                foreach ($filter->group as $inside_filter) {
+                    $builder = $this->addFilter($options, $builder, $inside_filter);
+                }
+            };
+
+            if ($filter->boolean === IndexActionRequestPayloadFilterBooleanEnum::And) {
+                $builder = $builder->where($inside_function);
+            } else {
+                $builder = $builder->orWhere($inside_function);
+            }
+
+            return $builder;
+        }
+
         $column = $filter->column;
+        if (! $column) {
+            throw new RuntimeException('Column field cannot be null.');
+        }
+
         $operator = $filter->operator->value;
         $value = $filter->value;
         $boolean = $filter->boolean->value;

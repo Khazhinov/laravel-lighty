@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\DTO;
 
@@ -25,9 +25,7 @@ class ApiResponseDTO extends DataTransferObject
     public string $message;
 
     public mixed $data;
-
     public mixed $error;
-
     public mixed $meta = null;
 
     /**

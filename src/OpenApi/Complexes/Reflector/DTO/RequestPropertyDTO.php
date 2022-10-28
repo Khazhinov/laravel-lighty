@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\OpenApi\Complexes\Reflector\DTO;
 
@@ -16,6 +16,7 @@ class RequestPropertyDTO extends DataTransferObject
     public bool $required = false;
     public bool $nullable = false;
     public bool $sometimes = false;
+
     /** @var array<mixed>|null */
     public ?array $child = null;
 

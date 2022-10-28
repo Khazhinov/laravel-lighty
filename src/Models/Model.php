@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Models;
 
@@ -32,6 +32,7 @@ abstract class Model extends ModelBase
 
         parent::boot();
     }
+
     /**
      * @var array<string, array<string, mixed>>
      */

@@ -1,19 +1,32 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload;
 
 use Khazhinov\PhpSupport\DTO\Custer\EnumCaster;
 use Khazhinov\PhpSupport\DTO\DataTransferObject;
 use Spatie\DataTransferObject\Attributes\CastWith;
+use Spatie\DataTransferObject\Casters\ArrayCaster;
 
 class IndexActionRequestPayloadFilterDTO extends DataTransferObject
 {
     /**
-     * @var string
+     * @var IndexActionRequestPayloadFilterTypeEnum
      */
-    public string $column;
+    #[CastWith(EnumCaster::class, enumType: IndexActionRequestPayloadFilterTypeEnum::class)]
+    public IndexActionRequestPayloadFilterTypeEnum $type = IndexActionRequestPayloadFilterTypeEnum::Single;
+
+    /**
+     * @var IndexActionRequestPayloadFilterDTO[]
+     */
+    #[CastWith(ArrayCaster::class, itemType: IndexActionRequestPayloadFilterDTO::class)]
+    public array $group = [];
+
+    /**
+     * @var ?string
+     */
+    public ?string $column = null;
 
     /**
      * @var IndexActionRequestPayloadFilterOperatorEnum

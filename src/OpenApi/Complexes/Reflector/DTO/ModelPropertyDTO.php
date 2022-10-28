@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\OpenApi\Complexes\Reflector\DTO;
 
@@ -15,8 +15,10 @@ class ModelPropertyDTO extends DataTransferObject
     public ?string $description = null;
     public ?string $related = null;
     public bool $nullable = false;
+
     /** @var ModelPropertyDTO[] */
     public array $related_properties = [];
+
     public mixed $fake_value = null;
 
     #[CastWith(EnumCaster::class, enumType: SchemeTypeEnum::class)]

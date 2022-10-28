@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Console\Commands\Generator;
 
@@ -13,11 +13,11 @@ abstract class BaseGenerator extends BaseCommand
     protected string $class_namespace;
     protected string $class_path;
     protected string $class_dir_path;
-
     protected string $default_generator_namespace;
     protected string $default_generator_dir;
 
     abstract public function initGeneratorParams(): void;
+
     abstract public function makeClassData(): string;
 
     /**

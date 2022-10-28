@@ -1,13 +1,10 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Http\Requests\CRUD;
 
-use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadFilterBooleanEnum;
-use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadFilterOperatorEnum;
 use Khazhinov\LaravelLighty\Http\Requests\BaseRequest;
-use Khazhinov\LaravelLighty\Http\Requests\Enum;
 
 class IndexRequest extends BaseRequest
 {
@@ -17,34 +14,6 @@ class IndexRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'filter' => [
-                'sometimes',
-                'array',
-                'min:1',
-            ],
-            'filter.*' => [
-                'sometimes',
-                'array',
-            ],
-            'filter.*.column' => [
-                'required_with:filter',
-                'string',
-                'min:1',
-                'max:255',
-            ],
-            'filter.*.operator' => [
-                'sometimes',
-                'string',
-                new Enum(type: IndexActionRequestPayloadFilterOperatorEnum::class),
-            ],
-            'filter.*.value' => [
-                'nullable',
-            ],
-            'filter.*.boolean' => [
-                'sometimes',
-                'string',
-                new Enum(type: IndexActionRequestPayloadFilterBooleanEnum::class),
-            ],
             'page' => [
                 'sometimes',
                 'integer',
