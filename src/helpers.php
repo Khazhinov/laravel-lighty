@@ -12,14 +12,17 @@ if (! function_exists('get_user')) {
     /**
      * Get a guard instance by name.
      *
-     * @param  string  $guard
+     * @param  ?string  $guard
      * @return AuthenticatableModel|null
      */
-    function get_user(string $guard = 'api'): AuthenticatableModel|null
+    function get_user(?string $guard = null): AuthenticatableModel|null
     {
         try {
             /** @var Factory $auth */
             $auth = auth();
+            if (is_null($guard)) {
+                $guard = config()->get('lighty.auth.guard');
+            }
             $user = $auth->guard($guard)->user();
 
             if ($user instanceof AuthenticatableModel) {

@@ -9,4 +9,7 @@ return [
         ],
         'user_model_class' => 'App\Models\User',
     ],
+    'auth' => [
+        'guard' => 'sanctum',
+    ]
 ];
