@@ -83,7 +83,7 @@ abstract class ExceptionHandler extends Handler implements RespondableInterface
 
         $response = [
             'status' => 'error',
-            'code' => $exception->getCode(),
+            'code' => $this->normalizeStatusCode($exception->getCode()),
             'message' => Response::$statusTexts[$code] ?? 'Something went wrong..',
             'headers' => $headers,
             'error' => $error_data,
