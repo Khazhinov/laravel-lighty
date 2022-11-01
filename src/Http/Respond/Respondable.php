@@ -33,7 +33,7 @@ trait Respondable
         return $response;
     }
 
-    protected function normalizeStatusCode(int $status_code): int
+    protected function normalizeStatusCode(mixed $status_code): int
     {
         if (array_key_exists($status_code, Response::$statusTexts)) {
             return $status_code;
