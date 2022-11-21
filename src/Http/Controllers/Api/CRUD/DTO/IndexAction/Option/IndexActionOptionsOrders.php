@@ -4,7 +4,9 @@ declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option;
 
+use Khazhinov\PhpSupport\DTO\Custer\EnumCaster;
 use Khazhinov\PhpSupport\DTO\DataTransferObject;
+use Spatie\DataTransferObject\Attributes\CastWith;
 
 class IndexActionOptionsOrders extends DataTransferObject
 {
@@ -26,5 +28,6 @@ class IndexActionOptionsOrders extends DataTransferObject
      *
      * @var IndexActionOptionsOrdersNullPositionEnum
      */
+    #[CastWith(EnumCaster::class, enumType: IndexActionOptionsOrdersNullPositionEnum::class)]
     public IndexActionOptionsOrdersNullPositionEnum $null_position = IndexActionOptionsOrdersNullPositionEnum::First;
 }
