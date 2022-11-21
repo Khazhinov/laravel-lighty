@@ -205,7 +205,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
         }
 
         if ($current_options->orders->enable) {
-            $builder = $this->addOrders($current_request, $builder);
+            $builder = $this->addOrders($current_options, $current_request, $builder);
         }
 
         if ($current_options->relationships->enable) {
@@ -411,7 +411,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
      * @param  Builder|DatabaseBuilder  $builder
      * @return Builder|DatabaseBuilder
      */
-    protected function addOrders(IndexActionRequestPayloadDTO $request, Builder|DatabaseBuilder $builder): Builder|DatabaseBuilder
+    protected function addOrders(IndexActionOptionsDTO $options, IndexActionRequestPayloadDTO $request, Builder|DatabaseBuilder $builder): Builder|DatabaseBuilder
     {
         $orders = $request->order;
 
@@ -420,7 +420,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
         }
 
         foreach ($orders as $order) {
-            $builder = $this->addOrder($builder, htmlspecialchars($order, FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+            $builder = $this->addOrder($options, $builder, htmlspecialchars($order, FILTER_SANITIZE_FULL_SPECIAL_CHARS));
         }
 
         return $builder;
@@ -431,7 +431,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
      * @param  string  $order
      * @return Builder|DatabaseBuilder
      */
-    protected function addOrder(Builder|DatabaseBuilder $builder, string $order): Builder|DatabaseBuilder
+    protected function addOrder(IndexActionOptionsDTO $options, Builder|DatabaseBuilder $builder, string $order): Builder|DatabaseBuilder
     {
         $direction = 'asc';
 
@@ -440,7 +440,11 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             $order = substr($order, 1);
         }
 
-        $builder->orderBy($order, $direction);
+        if ($options->orders->null_control) {
+            $builder->orderByRaw(sprintf('? %s NULLS %s', $direction, $options->orders->null_position->value), [$order]);
+        } else {
+            $builder->orderBy($order, $direction);
+        }
 
         return $builder;
     }
