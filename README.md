@@ -11,10 +11,10 @@
 
 ## Установка
 
-Для установки данной библиотеки требуется использование Composer:
+Для установки данной библиотеки требуется использование Composer (для Laravel 9+):
 
 ```bash
-composer require "khazhinov/laravel-lighty:^1.7 -W"
+composer require "khazhinov/laravel-lighty:^9.0"
 ```
 
 При необходимости опубликуйте файл конфигурации:
