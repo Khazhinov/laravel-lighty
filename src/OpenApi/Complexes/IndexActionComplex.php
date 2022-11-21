@@ -69,22 +69,22 @@ class IndexActionComplex extends ComplexFactory
                             ->example([
                                 [
                                     'column' => $model_reflector->getFlattenModelProperties($arguments->model_class)[0],
-                                    'value' => 'test'
+                                    'value' => 'test',
                                 ],
                                 [
                                     'type' => 'group',
                                     'group' => [
                                         [
                                             'column' => $model_reflector->getFlattenModelProperties($arguments->model_class)[0],
-                                            'value' => 'test'
+                                            'value' => 'test',
                                         ],
                                         [
                                             'column' => $model_reflector->getFlattenModelProperties($arguments->model_class)[0],
                                             'value' => 'test',
-                                            'boolean' => 'or'
+                                            'boolean' => 'or',
                                         ],
-                                    ]
-                                ]
+                                    ],
+                                ],
                             ]),
                         Schema::object('with')->properties(
                             Schema::array('relationships')->items(

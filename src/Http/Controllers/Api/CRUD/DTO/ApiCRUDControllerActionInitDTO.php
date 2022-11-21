@@ -46,10 +46,11 @@ class ApiCRUDControllerActionInitDTO extends DataTransferObject
         }
 
         if (! is_a($action_option_dto, ApiCRUDControllerOptionDTO::class, true)) {
+            /** @var string $tmp_class */
             $tmp_class = $action_option_dto;
             $tmp_base_class = ApiCRUDControllerOptionDTO::class;
 
-            throw new RuntimeException("Class $tmp_class must be inherited from class $tmp_base_class");
+            throw new RuntimeException(sprintf("Class %s must be inherited from class %s", $tmp_class, $tmp_base_class));
         }
 
         return $action_option_dto;
