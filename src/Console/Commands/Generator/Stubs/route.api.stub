@@ -4,9 +4,6 @@ Route::group([
     "prefix" => "/{{ route_path }}",
     "as" => "{{ route_path_snake }}.",
 ], static function () {
-    Route::get("/validations/{method?}", "{{ controller_name }}@getValidations")->name("validations");
-
-    Route::get("/", "{{ controller_name }}@index")->name("index");
     Route::post("/search", "{{ controller_name }}@index")->name("search");
     Route::post("/setPosition", "{{ controller_name }}@setPosition")->name("set-position");
 
