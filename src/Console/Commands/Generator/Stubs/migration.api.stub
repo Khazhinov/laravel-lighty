@@ -13,7 +13,7 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::create('{{ table }}', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->autoIncrement()->primary()->comment('Уникальный идентификатор ...');
+            $table->unsignedBigInteger('id')->autoIncrement()->comment('Уникальный идентификатор ...');
 
             $table->string('name')->index()->comment('Имя ...');
 
