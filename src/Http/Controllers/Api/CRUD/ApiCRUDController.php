@@ -705,9 +705,11 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             $closure($this->current_model, ActionClosureModeEnum::BeforeFilling);
         }
 
+        $request_validated_data = $request->validated();
+
         foreach ($this->current_model->getFillable() as $column) {
-            if ($request->has($column)) {
-                $this->current_model->setAttribute($column, $request->input($column));
+            if (array_key_exists($column, $request_validated_data)) {
+                $this->current_model->setAttribute($column, $request_validated_data[$column]);
             }
         }
 
@@ -788,9 +790,11 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             $closure($this->current_model, ActionClosureModeEnum::BeforeFilling);
         }
 
+        $request_validated_data = $request->validated();
+
         foreach ($this->current_model->getFillable() as $column) {
-            if ($request->has($column)) {
-                $this->current_model->setAttribute($column, $request->input($column));
+            if (array_key_exists($column, $request_validated_data)) {
+                $this->current_model->setAttribute($column, $request_validated_data[$column]);
             }
         }
 
