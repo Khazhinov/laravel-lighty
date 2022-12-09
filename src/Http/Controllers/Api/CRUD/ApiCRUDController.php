@@ -705,6 +705,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             $closure($this->current_model, ActionClosureModeEnum::BeforeFilling);
         }
 
+        // В тело модели попадают только проверенные данные
         $request_validated_data = $request->validated();
 
         foreach ($this->current_model->getFillable() as $column) {
@@ -790,6 +791,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             $closure($this->current_model, ActionClosureModeEnum::BeforeFilling);
         }
 
+        // В тело модели попадают только проверенные данные
         $request_validated_data = $request->validated();
 
         foreach ($this->current_model->getFillable() as $column) {
