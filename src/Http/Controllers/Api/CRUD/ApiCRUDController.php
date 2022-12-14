@@ -760,13 +760,13 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             );
         } catch (Throwable $exception) {
             if ($closure) {
-                $closure($this->current_model, $exception, ActionClosureModeEnum::BeforeRollback);
+                $closure($this->current_model, ActionClosureModeEnum::BeforeRollback);
             }
 
             $this->rollback();
 
             if ($closure) {
-                $closure($this->current_model, $exception, ActionClosureModeEnum::AfterRollback);
+                $closure($this->current_model, ActionClosureModeEnum::AfterRollback);
             }
 
             throw $exception;
@@ -859,13 +859,13 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             );
         } catch (Throwable $exception) {
             if ($closure) {
-                $closure($this->current_model, $exception, ActionClosureModeEnum::BeforeRollback);
+                $closure($this->current_model, ActionClosureModeEnum::BeforeRollback);
             }
 
             $this->rollback();
 
             if ($closure) {
-                $closure($this->current_model, $exception, ActionClosureModeEnum::AfterRollback);
+                $closure($this->current_model, ActionClosureModeEnum::AfterRollback);
             }
 
             throw $exception;
@@ -958,13 +958,13 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             );
         } catch (Throwable $exception) {
             if ($closure) {
-                $closure($this->current_model, $exception, ActionClosureModeEnum::BeforeRollback);
+                $closure($this->current_model, ActionClosureModeEnum::BeforeRollback);
             }
 
             $this->rollback();
 
             if ($closure) {
-                $closure($this->current_model, $exception, ActionClosureModeEnum::AfterRollback);
+                $closure($this->current_model, ActionClosureModeEnum::AfterRollback);
             }
 
             throw $exception;
@@ -1056,13 +1056,13 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             );
         } catch (Throwable $exception) {
             if ($closure) {
-                $closure($this->current_model, $exception, ActionClosureModeEnum::BeforeRollback);
+                $closure($this->current_model, ActionClosureModeEnum::BeforeRollback);
             }
 
             $this->rollback();
 
             if ($closure) {
-                $closure($this->current_model, $exception, ActionClosureModeEnum::AfterRollback);
+                $closure($this->current_model, ActionClosureModeEnum::AfterRollback);
             }
 
             throw $exception;
