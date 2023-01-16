@@ -14,6 +14,7 @@ use Khazhinov\LaravelLighty\OpenApi\Complexes\IndexAction\IndexActionArgumentsDT
 use Khazhinov\LaravelLighty\OpenApi\Complexes\Reflector\ModelReflector;
 use Khazhinov\LaravelLighty\OpenApi\Complexes\Responses\ErrorResponse;
 use Khazhinov\LaravelLighty\OpenApi\Complexes\Responses\SuccessCollectionResourceResponse;
+use mysql_xdevapi\SchemaObject;
 
 class IndexActionComplex extends ComplexFactory
 {
@@ -96,15 +97,21 @@ class IndexActionComplex extends ComplexFactory
                         )->description('Объект отношений или свойств, требуемых к демонстрации в ответе коллекции'),
                         Schema::array('export')->items(
                             Schema::object('')->properties(
-                                Schema::string('column')
-                                    ->enum(...$model_reflector->getFlattenModelProperties($arguments->model_class))
-                                    ->description('Столбец сущности для экспорта')
-                                    ->default($model_reflector->getFlattenModelProperties($arguments->model_class)[0]),
-                                Schema::string('alias')
-                                    ->description('Название столбца в результирующей таблице')
-                                    ->default('Некое название'),
+                                Schema::string('file_name')
+                                    ->description('Имя файла при сохранении'),
+                                Schema::array('fields')->items(
+                                    Schema::object('')->properties(
+                                        Schema::string('column')
+                                            ->enum(...$model_reflector->getFlattenModelProperties($arguments->model_class))
+                                            ->description('Столбец сущности для экспорта')
+                                            ->default($model_reflector->getFlattenModelProperties($arguments->model_class)[0]),
+                                        Schema::string('alias')
+                                            ->description('Название столбца в результирующей таблице')
+                                            ->default('Некое название'),
+                                    ),
+                                )->description('Массив столбцов для экспорта. Преобразует ответ в xlsx файл с сохранением всех установленных ограничений.'),
                             ),
-                        )->description('Массив столбцов для экспорта. Преобразует ответ в xlsx файл с сохранением всех установленных ограничений.'),
+                        ),
                     )
                 ),
             );

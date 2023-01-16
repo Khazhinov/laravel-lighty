@@ -58,19 +58,27 @@ class IndexRequest extends BaseRequest
             'export' => [
                 'sometimes',
                 'array',
-                'min:1',
             ],
-            'export.*' => [
+            'export.file_name' => [
+                'sometimes',
+                'string',
+            ],
+            'export.fields' => [
+                'sometimes',
+                'array',
+                'min:1'
+            ],
+            'export.fields.*' => [
                 'sometimes',
                 'array',
             ],
-            'export.*.column' => [
+            'export.fields.*.column' => [
                 'required_with:export',
                 'string',
                 'min:1',
                 'max:255',
             ],
-            'export.*.alias' => [
+            'export.fields.*.alias' => [
                 'required_with:export',
                 'string',
                 'min:1',

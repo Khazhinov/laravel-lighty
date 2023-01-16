@@ -266,9 +266,15 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
                     );
                 }
 
+                if (isset($request->export['file_name']) && ! empty($request->export['file_name'])) {
+                    $file_name = sprintf('%s.xlsx', $request->export['file_name']);
+                } else {
+                    $file_name = $this->getExportFileName();
+                }
+
                 return Excel::download(
                     new $current_options->export->exporter_class($items, $export_columns, $page_title),
-                    $this->getExportFileName()
+                    $file_name
                 );
             default:
                 throw new RuntimeException('Undefined return type.');
@@ -705,6 +711,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             $closure($this->current_model, ActionClosureModeEnum::BeforeFilling);
         }
 
+        // В тело модели попадают только проверенные данные
         $request_validated_data = $request->validated();
 
         foreach ($this->current_model->getFillable() as $column) {
@@ -740,6 +747,11 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             }
 
             $this->commit();
+
+            if ($closure) {
+                $closure($this->current_model, ActionClosureModeEnum::AfterCommit);
+            }
+
             $this->loadAllRelationshipsAfterGet();
 
             $resource = $this->getSingleResource();
@@ -753,7 +765,15 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
                 )
             );
         } catch (Throwable $exception) {
+            if ($closure) {
+                $closure($this->current_model, ActionClosureModeEnum::BeforeRollback);
+            }
+
             $this->rollback();
+
+            if ($closure) {
+                $closure($this->current_model, ActionClosureModeEnum::AfterRollback);
+            }
 
             throw $exception;
         }
@@ -790,6 +810,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             $closure($this->current_model, ActionClosureModeEnum::BeforeFilling);
         }
 
+        // В тело модели попадают только проверенные данные
         $request_validated_data = $request->validated();
 
         foreach ($this->current_model->getFillable() as $column) {
@@ -825,6 +846,11 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             }
 
             $this->commit();
+
+            if ($closure) {
+                $closure($this->current_model, ActionClosureModeEnum::AfterCommit);
+            }
+
             $this->loadAllRelationshipsAfterGet();
 
             $resource = $this->getSingleResource();
@@ -838,7 +864,15 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
                 )
             );
         } catch (Throwable $exception) {
+            if ($closure) {
+                $closure($this->current_model, ActionClosureModeEnum::BeforeRollback);
+            }
+
             $this->rollback();
+
+            if ($closure) {
+                $closure($this->current_model, ActionClosureModeEnum::AfterRollback);
+            }
 
             throw $exception;
         }
@@ -917,6 +951,10 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
 
             $this->commit();
 
+            if ($closure) {
+                $closure($this->current_model, ActionClosureModeEnum::AfterCommit);
+            }
+
             return $this->respond(
                 $this->buildActionResponseDTO(
                     data: [
@@ -925,7 +963,15 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
                 )
             );
         } catch (Throwable $exception) {
+            if ($closure) {
+                $closure($this->current_model, ActionClosureModeEnum::BeforeRollback);
+            }
+
             $this->rollback();
+
+            if ($closure) {
+                $closure($this->current_model, ActionClosureModeEnum::AfterRollback);
+            }
 
             throw $exception;
         }
@@ -1003,6 +1049,10 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
 
             $this->commit();
 
+            if ($closure) {
+                $closure($this->current_model, ActionClosureModeEnum::AfterCommit);
+            }
+
             return $this->respond(
                 $this->buildActionResponseDTO(
                     data: [
@@ -1011,7 +1061,15 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
                 )
             );
         } catch (Throwable $exception) {
+            if ($closure) {
+                $closure($this->current_model, ActionClosureModeEnum::BeforeRollback);
+            }
+
             $this->rollback();
+
+            if ($closure) {
+                $closure($this->current_model, ActionClosureModeEnum::AfterRollback);
+            }
 
             throw $exception;
         }
