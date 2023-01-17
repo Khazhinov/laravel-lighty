@@ -5,16 +5,19 @@ declare(strict_types = 1);
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload;
 
 use Khazhinov\PhpSupport\DTO\DataTransferObject;
+use Spatie\DataTransferObject\Attributes\CastWith;
+use Spatie\DataTransferObject\Casters\ArrayCaster;
 
 class IndexActionRequestPayloadExportDTO extends DataTransferObject
 {
     /**
-     * @var string
+     * @var ?string
      */
-    public string $column;
+    public ?string $file_name = null;
 
     /**
-     * @var string
+     * @var IndexActionRequestPayloadExportFieldItemDTO[]
      */
-    public string $alias;
+    #[CastWith(ArrayCaster::class, itemType: IndexActionRequestPayloadExportFieldItemDTO::class)]
+    public array $fields = [];
 }

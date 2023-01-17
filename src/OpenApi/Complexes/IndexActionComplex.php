@@ -18,7 +18,7 @@ use Khazhinov\LaravelLighty\OpenApi\Complexes\Responses\SuccessCollectionResourc
 class IndexActionComplex extends ComplexFactory
 {
     /**
-     * @param  mixed  ...$arguments
+     * @param mixed ...$arguments
      * @return ComplexFactoryResult
      * @throws JsonException
      */
@@ -94,17 +94,21 @@ class IndexActionComplex extends ComplexFactory
                                 Schema::string()->enum(...$additions->properties)->description('Название свойства'),
                             )->description('Список свойств, требуемых к выгрузке в ответе коллекции'),
                         )->description('Объект отношений или свойств, требуемых к демонстрации в ответе коллекции'),
-                        Schema::array('export')->items(
-                            Schema::object('')->properties(
-                                Schema::string('column')
-                                    ->enum(...$model_reflector->getFlattenModelProperties($arguments->model_class))
-                                    ->description('Столбец сущности для экспорта')
-                                    ->default($model_reflector->getFlattenModelProperties($arguments->model_class)[0]),
-                                Schema::string('alias')
-                                    ->description('Название столбца в результирующей таблице')
-                                    ->default('Некое название'),
-                            ),
-                        )->description('Массив столбцов для экспорта. Преобразует ответ в xlsx файл с сохранением всех установленных ограничений.'),
+                        Schema::object('export')->properties(
+                            Schema::string('file_name')
+                                ->description('Имя файла при сохранении'),
+                            Schema::array('fields')->items(
+                                Schema::object('')->properties(
+                                    Schema::string('column')
+                                        ->enum(...$model_reflector->getFlattenModelProperties($arguments->model_class))
+                                        ->description('Столбец сущности для экспорта')
+                                        ->default($model_reflector->getFlattenModelProperties($arguments->model_class)[0]),
+                                    Schema::string('alias')
+                                        ->description('Название столбца в результирующей таблице')
+                                        ->default('Некое название'),
+                                ),
+                            )->description('Массив столбцов для экспорта. Преобразует ответ в xlsx файл с сохранением всех установленных ограничений.'),
+                        ),
                     )
                 ),
             );
@@ -115,14 +119,12 @@ class IndexActionComplex extends ComplexFactory
                 ->name('limit')
                 ->description('Количество элементов на странице')
                 ->required(false)
-                ->schema(Schema::integer()->default(10))
-            ;
+                ->schema(Schema::integer()->default(10));
             $complex_result->parameters[] = Parameter::query()
                 ->name('page')
                 ->description('Требуемая страница')
                 ->required(false)
-                ->schema(Schema::integer()->default(1))
-            ;
+                ->schema(Schema::integer()->default(1));
         }
 
         if ($arguments->options->orders->enable) {
@@ -130,8 +132,7 @@ class IndexActionComplex extends ComplexFactory
                 ->name('order[]')
                 ->description("Массив сортировок")
                 ->required(false)
-                ->schema(Schema::array()->items(Schema::string())->default(['-id']))
-            ;
+                ->schema(Schema::array()->items(Schema::string())->default(['-id']));
         }
 
         $complex_result->responses = [

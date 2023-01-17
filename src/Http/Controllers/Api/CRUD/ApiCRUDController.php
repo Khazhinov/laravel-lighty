@@ -266,9 +266,15 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
                     );
                 }
 
+                if (isset($request->export['file_name']) && ! empty($request->export['file_name'])) {
+                    $file_name = sprintf('%s.xlsx', $request->export['file_name']);
+                } else {
+                    $file_name = $this->getExportFileName();
+                }
+
                 return Excel::download(
                     new $current_options->export->exporter_class($items, $export_columns, $page_title),
-                    $this->getExportFileName()
+                    $file_name
                 );
             default:
                 throw new RuntimeException('Undefined return type.');

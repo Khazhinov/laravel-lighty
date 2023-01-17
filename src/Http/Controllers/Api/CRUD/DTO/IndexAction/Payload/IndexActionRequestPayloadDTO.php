@@ -39,10 +39,9 @@ class IndexActionRequestPayloadDTO extends DataTransferObject
     public array|null $with = null;
 
     /**
-     * @var IndexActionRequestPayloadExportDTO[]
+     * @var IndexActionRequestPayloadExportDTO
      */
-    #[CastWith(ArrayCaster::class, itemType: IndexActionRequestPayloadExportDTO::class)]
-    public array $export = [];
+    public IndexActionRequestPayloadExportDTO $export;
 
     /**
      * @return array<string, string>
@@ -50,7 +49,7 @@ class IndexActionRequestPayloadDTO extends DataTransferObject
     public function getExportColumns(): array
     {
         $result = [];
-        foreach ($this->export as $export_object) {
+        foreach ($this->export->fields as $export_object) {
             $result[$export_object->column] = $export_object->alias;
         }
 
@@ -59,6 +58,6 @@ class IndexActionRequestPayloadDTO extends DataTransferObject
 
     public function hasExportColumns(): bool
     {
-        return (bool) count($this->export);
+        return (bool) count($this->export->fields);
     }
 }
