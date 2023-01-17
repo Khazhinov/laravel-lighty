@@ -66,7 +66,7 @@ class IndexRequest extends BaseRequest
             'export.fields' => [
                 'sometimes',
                 'array',
-                'min:1'
+                'min:1',
             ],
             'export.fields.*' => [
                 'sometimes',

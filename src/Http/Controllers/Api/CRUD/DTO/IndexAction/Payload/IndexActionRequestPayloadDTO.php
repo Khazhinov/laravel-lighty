@@ -39,9 +39,9 @@ class IndexActionRequestPayloadDTO extends DataTransferObject
     public array|null $with = null;
 
     /**
-     * @var IndexActionRequestPayloadExportDTO[]
+     * @var IndexActionRequestPayloadExportDTO
      */
-    public IndexActionRequestPayloadExportExpandDTO $export;
+    public IndexActionRequestPayloadExportDTO $export;
 
     /**
      * @return array<string, string>
