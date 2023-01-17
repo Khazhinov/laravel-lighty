@@ -11,4 +11,7 @@ enum ActionClosureModeEnum: string
     case BeforeDeleting = 'before_deleting';
     case AfterDeleting = 'after_deleting';
     case AfterSave = 'after_save';
+    case AfterCommit = 'after_commit';
+    case BeforeRollback = 'before_rollback';
+    case AfterRollback = 'after_rollback';
 }
