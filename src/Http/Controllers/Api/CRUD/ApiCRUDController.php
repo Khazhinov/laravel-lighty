@@ -232,22 +232,22 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
         }
 
         switch ($current_options->getReturnTypeByRequestPayload($current_request)) {
-//            case IndexActionOptionsReturnTypeEnum::Resource:
-//                $resource = $this->getCollectionResource();
-//
-//                if (! $single_resource_class = $current_options->single_resource_class) {
-//                    /** @var CollectionResource $result */
-//                    $result = new $resource($items);
-//                } else {
-//                    /** @var CollectionResource $result */
-//                    $result = new $resource($items, $single_resource_class);
-//                }
-//
-//                return $this->respond(
-//                    $this->buildActionResponseDTO(
-//                        data: $result,
-//                    )
-//                );
+            case IndexActionOptionsReturnTypeEnum::Resource:
+                $resource = $this->getCollectionResource();
+
+                if (! $single_resource_class = $current_options->single_resource_class) {
+                    /** @var CollectionResource $result */
+                    $result = new $resource($items);
+                } else {
+                    /** @var CollectionResource $result */
+                    $result = new $resource($items, $single_resource_class);
+                }
+
+                return $this->respond(
+                    $this->buildActionResponseDTO(
+                        data: $result,
+                    )
+                );
             case IndexActionOptionsReturnTypeEnum::XLSX:
                 $export_columns = $current_request->getExportColumns();
 

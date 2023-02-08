@@ -4,8 +4,7 @@ namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Opti
 
 enum IndexActionOptionsReturnTypeEnum: string
 {
-//    case Resource = 'resource';
+    case Resource = 'resource';
     case XLSX = 'xlsx';
     case CSV = 'csv';
-    case UNDEFINED = 'undefined';
 }
