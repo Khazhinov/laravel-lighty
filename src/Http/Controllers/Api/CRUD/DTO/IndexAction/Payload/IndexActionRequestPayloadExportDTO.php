@@ -16,6 +16,11 @@ class IndexActionRequestPayloadExportDTO extends DataTransferObject
     public ?string $file_name = null;
 
     /**
+     * @var ?string
+     */
+    public ?string $return_type = null;
+
+    /**
      * @var IndexActionRequestPayloadExportFieldItemDTO[]
      */
     #[CastWith(ArrayCaster::class, itemType: IndexActionRequestPayloadExportFieldItemDTO::class)]

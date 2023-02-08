@@ -48,14 +48,19 @@ class IndexActionOptionsDTO extends ApiCRUDControllerOptionDTO
      */
     public function getReturnTypeByRequestPayload(IndexActionRequestPayloadDTO $request): IndexActionOptionsReturnTypeEnum
     {
-        if (! $this->export->enable) {
-            return IndexActionOptionsReturnTypeEnum::Resource;
+//        if (! $this->export->enable) {
+//            return IndexActionOptionsReturnTypeEnum::Resource;
+//        }
+
+        if ($request->getReturnType() == 'csv') {
+            return IndexActionOptionsReturnTypeEnum::CSV;
         }
 
-        if ($request->hasExportColumns()) {
+        if ($request->getReturnType() == 'xlsx') {
             return IndexActionOptionsReturnTypeEnum::XLSX;
         }
 
-        return IndexActionOptionsReturnTypeEnum::Resource;
+//        return IndexActionOptionsReturnTypeEnum::Resource;
+        return IndexActionOptionsReturnTypeEnum::UNDEFINED;
     }
 }
