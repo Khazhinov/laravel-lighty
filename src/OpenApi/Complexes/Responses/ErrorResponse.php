@@ -63,10 +63,13 @@ class ErrorResponse
                 break;
         }
 
-        return Response::badRequest()->description($response_description)->content(
-            MediaType::json()->schema(
-                Schema::object('')->properties(...$properties),
+        return Response::create()
+            ->content(
+                MediaType::json()->schema(
+                    Schema::object('')->properties(...$properties),
+                )
             )
-        );
+            ->statusCode($code)
+            ->description($response_description);
     }
 }
