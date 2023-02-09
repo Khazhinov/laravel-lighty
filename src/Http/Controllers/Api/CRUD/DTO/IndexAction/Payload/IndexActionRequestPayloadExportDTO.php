@@ -18,7 +18,7 @@ class IndexActionRequestPayloadExportDTO extends DataTransferObject
     /**
      * @var ?string
      */
-    public ?string $return_type = null;
+    public ?string $export_type = null;
 
     /**
      * @var IndexActionRequestPayloadExportFieldItemDTO[]

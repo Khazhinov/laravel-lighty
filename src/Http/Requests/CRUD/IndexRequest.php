@@ -4,6 +4,8 @@ declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Http\Requests\CRUD;
 
+use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option\IndexActionOptionsExportExportTypeEnum;
+use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option\IndexActionOptionsReturnTypeEnum;
 use Khazhinov\LaravelLighty\Http\Requests\BaseRequest;
 
 class IndexRequest extends BaseRequest
@@ -13,6 +15,17 @@ class IndexRequest extends BaseRequest
      */
     public function rules(): array
     {
+        $return_type_enum_cases = IndexActionOptionsReturnTypeEnum::cases();
+        $return_type_enum_values = [];
+        foreach ($return_type_enum_cases as $return_enum_case) {
+            $return_type_enum_values[] = sprintf('"%s"', $return_enum_case->value);
+        }
+        $export_type_enum_cases = IndexActionOptionsExportExportTypeEnum::cases();
+        $export_type_enum_values = [];
+        foreach ($export_type_enum_cases as $export_enum_case) {
+            $export_type_enum_values[] = sprintf('"%s"', $export_enum_case->value);
+        }
+
         return [
             'page' => [
                 'sometimes',
@@ -55,6 +68,11 @@ class IndexRequest extends BaseRequest
                 'required_with:with.properties',
                 'string',
             ],
+            'return_type' => [
+                'sometimes',
+                'string',
+                sprintf('in:%s', implode(",", $return_type_enum_values)),
+            ],
             'export' => [
                 'sometimes',
                 'array',
@@ -63,9 +81,10 @@ class IndexRequest extends BaseRequest
                 'sometimes',
                 'string',
             ],
-            'export.return_type' => [
+            'export.export_type' => [
                 'sometimes',
                 'string',
+                sprintf('in:%s', implode(",", $export_type_enum_values)),
             ],
             'export.fields' => [
                 'sometimes',

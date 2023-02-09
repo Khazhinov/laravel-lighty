@@ -52,14 +52,6 @@ class IndexActionOptionsDTO extends ApiCRUDControllerOptionDTO
             return IndexActionOptionsReturnTypeEnum::Resource;
         }
 
-        if ($request->getReturnType() == 'csv') {
-            return IndexActionOptionsReturnTypeEnum::CSV;
-        }
-
-        if ($request->getReturnType() == 'xlsx') {
-            return IndexActionOptionsReturnTypeEnum::XLSX;
-        }
-
-        return IndexActionOptionsReturnTypeEnum::Resource;
+        return $request->getReturnType();
     }
 }

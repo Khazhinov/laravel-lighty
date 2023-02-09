@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload;
 
+use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option\IndexActionOptionsReturnTypeEnum;
 use Khazhinov\PhpSupport\DTO\DataTransferObject;
 use Khazhinov\PhpSupport\DTO\Validation\ArrayOfScalar;
 use Khazhinov\PhpSupport\DTO\Validation\NumberBetween;
@@ -38,6 +39,8 @@ class IndexActionRequestPayloadDTO extends DataTransferObject
      */
     public array|null $with = null;
 
+    public string $return_type = 'resource';
+
     /**
      * @var IndexActionRequestPayloadExportDTO
      */
@@ -61,8 +64,8 @@ class IndexActionRequestPayloadDTO extends DataTransferObject
         return (bool) count($this->export->fields);
     }
 
-    public function getReturnType(): string
+    public function getReturnType(): IndexActionOptionsReturnTypeEnum
     {
-        return (string) $this->export->return_type;
+        return IndexActionOptionsReturnTypeEnum::from($this->return_type);
     }
 }

@@ -29,11 +29,14 @@ class ModelExport implements FromView, WithTitle, ShouldAutoSize, WithCustomCsvS
     ) {
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getCsvSettings(): array
     {
         return [
-            'input_encoding' => 'UTF-8',
-            'output_encoding' => 'windows-1251',
+            'input_encoding' => config('lighty.export.csv.input_encoding'),
+            'output_encoding' => config('lighty.export.csv.output_encoding'),
         ];
     }
 
@@ -57,16 +60,7 @@ class ModelExport implements FromView, WithTitle, ShouldAutoSize, WithCustomCsvS
      */
     public function styles(Worksheet $sheet): array
     {
-        return [
-            // Style the first row as bold text.
-            1 => ['font' => ['bold' => true]],
-
-            // Styling a specific cell by coordinate.
-//            'B2' => ['font' => ['italic' => true]],
-
-            // Styling an entire column.
-//            'C'  => ['font' => ['size' => 16]],
-        ];
+        return config('lighty.export.xlsx.styles');
     }
 
     public function title(): string

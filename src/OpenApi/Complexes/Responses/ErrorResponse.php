@@ -50,6 +50,12 @@ class ErrorResponse
                 );
 
                 break;
+            case 'string':
+                $properties[] = Schema::string('error')->default(
+                    $error
+                );
+
+                break;
             default:
                 break;
         }

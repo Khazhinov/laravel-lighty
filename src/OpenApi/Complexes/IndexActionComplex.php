@@ -9,6 +9,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 use JsonException;
 use Khazhinov\LaravelFlyDocs\Generator\Factories\ComplexFactory;
 use Khazhinov\LaravelFlyDocs\Generator\Factories\ComplexFactoryResult;
+use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option\IndexActionOptionsExportExportTypeEnum;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option\IndexActionOptionsReturnTypeEnum;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadFilterOperatorEnum;
 use Khazhinov\LaravelLighty\OpenApi\Complexes\IndexAction\IndexActionArgumentsDTO;
@@ -37,10 +38,15 @@ class IndexActionComplex extends ComplexFactory
             foreach ($operator_enum_cases as $enum_case) {
                 $operator_enum_values[] = $enum_case->value;
             }
-            $export_return_type_enum_cases = IndexActionOptionsReturnTypeEnum::cases();
-            $export_return_type_enum_values = [];
-            foreach ($export_return_type_enum_cases as $enum_case) {
-                $export_return_type_enum_values[] = $enum_case->value;
+            $return_type_enum_cases = IndexActionOptionsReturnTypeEnum::cases();
+            $return_type_enum_values = [];
+            foreach ($return_type_enum_cases as $return_enum_case) {
+                $return_type_enum_values[] = $return_enum_case->value;
+            }
+            $export_type_enum_cases = IndexActionOptionsExportExportTypeEnum::cases();
+            $export_type_enum_values = [];
+            foreach ($export_type_enum_cases as $export_enum_case) {
+                $export_type_enum_values[] = $export_enum_case->value;
             }
 
             $complex_result->request_body = RequestBody::create()->content(
@@ -100,12 +106,17 @@ class IndexActionComplex extends ComplexFactory
                                 Schema::string()->enum(...$additions->properties)->description('Название свойства'),
                             )->description('Список свойств, требуемых к выгрузке в ответе коллекции'),
                         )->description('Объект отношений или свойств, требуемых к демонстрации в ответе коллекции'),
+                        Schema::string('return_type')
+                            ->default('resource')
+                            ->enum(...$return_type_enum_values)
+                            ->description('Тип возвращаемого результата (JSON response/Export file)'),
                         Schema::object('export')->properties(
                             Schema::string('file_name')
                                 ->description('Имя файла при сохранении'),
-                            Schema::string('return_type')
-                                ->enum(...$export_return_type_enum_values)
-                                ->description('Расширение файла при сохранении(csv/xlsx)'),
+                            Schema::string('export_type')
+                                ->default('xlsx')
+                                ->enum(...$export_type_enum_values)
+                                ->description('Расширение результирующего файла'),
                             Schema::array('fields')->items(
                                 Schema::object('')->properties(
                                     Schema::string('column')

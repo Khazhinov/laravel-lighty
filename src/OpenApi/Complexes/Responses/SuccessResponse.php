@@ -56,6 +56,13 @@ class SuccessResponse
                 );
 
                 break;
+            case 'string':
+                /** @var SchemaContract[] $data */
+                $properties[] = Schema::string('data')->default(
+                    $data,
+                );
+
+                break;
             default:
                 break;
         }

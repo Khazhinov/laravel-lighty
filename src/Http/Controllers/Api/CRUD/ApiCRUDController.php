@@ -25,6 +25,7 @@ use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\BulkDestroyAction\Opti
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\BulkDestroyAction\Payload\BulkDestroyActionRequestPayloadDTO;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\DestroyAction\Option\DestroyActionOptionsDTO;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option\IndexActionOptionsDTO;
+use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option\IndexActionOptionsExportExportTypeEnum;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option\IndexActionOptionsReturnTypeEnum;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadDTO;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadFilterBooleanEnum;
@@ -248,7 +249,13 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
                         data: $result,
                     )
                 );
-            case IndexActionOptionsReturnTypeEnum::XLSX:
+            case IndexActionOptionsReturnTypeEnum::Export:
+                if ($current_request->export->export_type) {
+                    $export_type = IndexActionOptionsExportExportTypeEnum::from($current_request->export->export_type);
+                } else {
+                    $export_type = $current_options->export->default_export_type;
+                }
+
                 $export_columns = $current_request->getExportColumns();
 
                 if (! count($export_columns)) {
@@ -266,45 +273,34 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
                     );
                 }
 
-                if (isset($request->export['file_name']) && ! empty($request->export['file_name'])) {
-                    $file_name = sprintf('%s.xlsx', $request->export['file_name']);
-                } else {
-                    $file_name = $this->getExportFileName();
+                switch ($export_type) {
+                    case IndexActionOptionsExportExportTypeEnum::XLSX:
+                        if (isset($request->export['file_name']) && ! empty($request->export['file_name'])) {
+                            $file_name = sprintf('%s.xlsx', $request->export['file_name']);
+                        } else {
+                            $file_name = $this->getExportFileName();
+                        }
+
+                        return Excel::download(
+                            new $current_options->export->exporter_class($items, $export_columns, $page_title),
+                            $file_name
+                        );
+                    case IndexActionOptionsExportExportTypeEnum::CSV:
+                        if (isset($request->export['file_name']) && ! empty($request->export['file_name'])) {
+                            $file_name = sprintf('%s.csv', $request->export['file_name']);
+                        } else {
+                            $file_name = $this->getExportFileName();
+                        }
+
+                        return Excel::download(
+                            new $current_options->export->exporter_class($items, $export_columns, $page_title),
+                            $file_name,
+                            \Maatwebsite\Excel\Excel::CSV,
+                        );
+                    default:
+                        throw new RuntimeException('Undefined export type.');
                 }
-
-                return Excel::download(
-                    new $current_options->export->exporter_class($items, $export_columns, $page_title),
-                    $file_name
-                );
-            case IndexActionOptionsReturnTypeEnum::CSV:
-                $export_columns = $current_request->getExportColumns();
-
-                if (! count($export_columns)) {
-                    throw new RuntimeException('Requires specifying columns for export.');
-                }
-
-                $page_title = false;
-                if (isset($limit, $page)) {
-                    $page_title = helper_string_plural(
-                        helper_string_title(
-                            class_basename(
-                                $this->current_model
-                            )
-                        )
-                    );
-                }
-
-                if (isset($request->export['file_name']) && ! empty($request->export['file_name'])) {
-                    $file_name = sprintf('%s.csv', $request->export['file_name']);
-                } else {
-                    $file_name = $this->getExportFileName();
-                }
-
-                return Excel::download(
-                    new $current_options->export->exporter_class($items, $export_columns, $page_title),
-                    $file_name,
-                    \Maatwebsite\Excel\Excel::CSV,
-                );
+                // no break
             default:
                 throw new RuntimeException('Undefined return type.');
         }
