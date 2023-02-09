@@ -19,7 +19,7 @@ class ErrorResponse
         int $code = 400,
         string $message = 'Bad Request',
     ): Response {
-        $available_error_types = ['object', 'array'];
+        $available_error_types = ['object', 'array', 'string'];
         if (! in_array($error_type, $available_error_types)) {
             throw new RuntimeException(sprintf('Неверный тип ошибки (%s). Возможные типы: %s', $error_type, implode(',', $available_error_types)));
         }

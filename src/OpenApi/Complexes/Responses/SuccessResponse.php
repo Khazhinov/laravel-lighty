@@ -29,7 +29,7 @@ class SuccessResponse
         int $code = 200,
         string $message = 'OK',
     ): Response {
-        $available_data_types = ['object', 'array'];
+        $available_data_types = ['object', 'array', 'string'];
         if (! in_array($data_type, $available_data_types)) {
             throw new RuntimeException(sprintf('Неверный тип ошибки (%s). Возможные типы: %s', $data_type, implode(',', $available_data_types)));
         }
