@@ -22,7 +22,7 @@ class SuccessResponse
      * @return Response
      */
     public static function build(
-        SchemaContract|array $data,
+        SchemaContract|array|string $data,
         array $additional_properties = [],
         string $response_description = 'Успешный ответ',
         string $data_type = 'object',
@@ -57,7 +57,7 @@ class SuccessResponse
 
                 break;
             case 'string':
-                /** @var SchemaContract[] $data */
+                /** @var string $data */
                 $properties[] = Schema::string('data')->default(
                     $data,
                 );

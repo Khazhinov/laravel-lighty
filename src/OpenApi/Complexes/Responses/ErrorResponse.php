@@ -13,7 +13,7 @@ use RuntimeException;
 class ErrorResponse
 {
     public static function build(
-        ?SchemaContract $error = null,
+        null|SchemaContract|string $error = null,
         string $response_description = 'Ответ с ошибкой',
         string $error_type = 'object',
         int $code = 400,
@@ -39,18 +39,21 @@ class ErrorResponse
 
         switch ($error_type) {
             case 'array':
+                /** @var SchemaContract $error */
                 $properties[] = Schema::array('error')->items(
                     $error
                 );
 
                 break;
             case 'object':
+                /** @var SchemaContract $error */
                 $properties[] = Schema::object('error')->properties(
                     $error
                 );
 
                 break;
             case 'string':
+                /** @var string $error */
                 $properties[] = Schema::string('error')->default(
                     $error
                 );
