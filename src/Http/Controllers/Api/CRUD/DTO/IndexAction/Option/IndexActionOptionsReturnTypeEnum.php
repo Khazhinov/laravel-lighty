@@ -6,4 +6,5 @@ enum IndexActionOptionsReturnTypeEnum: string
 {
     case Resource = 'resource';
     case XLSX = 'xlsx';
+    case CSV = 'csv';
 }

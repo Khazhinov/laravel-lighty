@@ -60,4 +60,9 @@ class IndexActionRequestPayloadDTO extends DataTransferObject
     {
         return (bool) count($this->export->fields);
     }
+
+    public function getReturnType(): string
+    {
+        return (string) $this->export->return_type;
+    }
 }

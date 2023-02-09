@@ -9,12 +9,13 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithCustomCsvSettings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 //use Maatwebsite\Excel\Concerns\WithStyles;
 
-class ModelExport implements FromView, WithTitle, ShouldAutoSize //, WithStyles
+class ModelExport implements FromView, WithTitle, ShouldAutoSize, WithCustomCsvSettings //, WithStyles
 {
     /**
      * @param array<int, mixed>|Collection|ArrayAccess $items
@@ -26,6 +27,14 @@ class ModelExport implements FromView, WithTitle, ShouldAutoSize //, WithStyles
         protected array $export_columns,
         protected string|bool $page_title = false
     ) {
+    }
+
+    public function getCsvSettings(): array
+    {
+        return [
+            'input_encoding' => 'UTF-8',
+            'output_encoding' => 'windows-1251',
+        ];
     }
 
     public function view(): View

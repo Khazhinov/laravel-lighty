@@ -276,6 +276,35 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
                     new $current_options->export->exporter_class($items, $export_columns, $page_title),
                     $file_name
                 );
+            case IndexActionOptionsReturnTypeEnum::CSV:
+                $export_columns = $current_request->getExportColumns();
+
+                if (! count($export_columns)) {
+                    throw new RuntimeException('Requires specifying columns for export.');
+                }
+
+                $page_title = false;
+                if (isset($limit, $page)) {
+                    $page_title = helper_string_plural(
+                        helper_string_title(
+                            class_basename(
+                                $this->current_model
+                            )
+                        )
+                    );
+                }
+
+                if (isset($request->export['file_name']) && ! empty($request->export['file_name'])) {
+                    $file_name = sprintf('%s.csv', $request->export['file_name']);
+                } else {
+                    $file_name = $this->getExportFileName();
+                }
+
+                return Excel::download(
+                    new $current_options->export->exporter_class($items, $export_columns, $page_title),
+                    $file_name,
+                    \Maatwebsite\Excel\Excel::CSV,
+                );
             default:
                 throw new RuntimeException('Undefined return type.');
         }

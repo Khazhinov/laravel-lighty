@@ -9,6 +9,7 @@ use GoldSpecDigital\ObjectOrientedOAS\Objects\Schema;
 use JsonException;
 use Khazhinov\LaravelFlyDocs\Generator\Factories\ComplexFactory;
 use Khazhinov\LaravelFlyDocs\Generator\Factories\ComplexFactoryResult;
+use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option\IndexActionOptionsReturnTypeEnum;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadFilterOperatorEnum;
 use Khazhinov\LaravelLighty\OpenApi\Complexes\IndexAction\IndexActionArgumentsDTO;
 use Khazhinov\LaravelLighty\OpenApi\Complexes\Reflector\ModelReflector;
@@ -35,6 +36,11 @@ class IndexActionComplex extends ComplexFactory
             $operator_enum_values = [];
             foreach ($operator_enum_cases as $enum_case) {
                 $operator_enum_values[] = $enum_case->value;
+            }
+            $export_return_type_enum_cases = IndexActionOptionsReturnTypeEnum::cases();
+            $export_return_type_enum_values = [];
+            foreach ($export_return_type_enum_cases as $enum_case) {
+                $export_return_type_enum_values[] = $enum_case->value;
             }
 
             $complex_result->request_body = RequestBody::create()->content(
@@ -97,6 +103,9 @@ class IndexActionComplex extends ComplexFactory
                         Schema::object('export')->properties(
                             Schema::string('file_name')
                                 ->description('Имя файла при сохранении'),
+                            Schema::string('return_type')
+                                ->enum(...$export_return_type_enum_values)
+                                ->description('Расширение файла при сохранении(csv/xlsx)'),
                             Schema::array('fields')->items(
                                 Schema::object('')->properties(
                                     Schema::string('column')

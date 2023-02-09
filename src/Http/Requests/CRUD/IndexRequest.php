@@ -63,6 +63,10 @@ class IndexRequest extends BaseRequest
                 'sometimes',
                 'string',
             ],
+            'export.return_type' => [
+                'sometimes',
+                'string',
+            ],
             'export.fields' => [
                 'sometimes',
                 'array',
