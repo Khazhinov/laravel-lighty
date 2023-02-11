@@ -232,6 +232,9 @@ class ModelReflector
                             // Если к одному
                             if ($property_type::class === Object_::class) {
                                 $tmp_related = (string) $property_type->getFqsen();
+                                if (substr_count($tmp_related, '\\') === 1) {
+                                    $tmp_related = '\App\Models' . $tmp_related;
+                                }
                                 if (is_a($tmp_related, Model::class, true)) {
                                     $related = $tmp_related;
                                     $nullable = true;
@@ -242,6 +245,9 @@ class ModelReflector
                             // Если ко многим
                             if ($property_type::class === Array_::class) {
                                 $tmp_related = (string) $property_type->getValueType();
+                                if (substr_count($tmp_related, '\\') === 1) {
+                                    $tmp_related = '\App\Models' . $tmp_related;
+                                }
                                 if (is_a($tmp_related, Model::class, true)) {
                                     $related = $tmp_related;
                                     $nullable = true;
