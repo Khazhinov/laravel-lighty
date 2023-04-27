@@ -247,6 +247,7 @@ class ModelReflector
                             Float_::class, Numeric_::class => SchemeTypeEnum::Number,
                             Integer::class => SchemeTypeEnum::Integer,
                             Boolean::class => SchemeTypeEnum::Boolean,
+                            Array_::class => SchemeTypeEnum::Single,
                             default => false,
                         };
                     } else {
@@ -448,19 +449,28 @@ class ModelReflector
         foreach ($properties as $property) {
             switch ($property->type) {
                 case SchemeTypeEnum::Collection:
-                    /** @var Model $related_source_model */
-                    $related_source_model = new $property->related();
-                    /** @var Model $virtual_related_model */
-                    $virtual_related_model = $this->getVirtualModelByProperties($related_source_model, $property->related_properties);
-                    $collection = new Collection();
-                    $collection = $collection->push($virtual_related_model);
-                    $result_properties[$property->name] = $collection;
+                    if ($property->related) {
+                        /** @var Model $related_source_model */
+                        $related_source_model = new $property->related();
+                        /** @var Model $virtual_related_model */
+                        $virtual_related_model = $this->getVirtualModelByProperties($related_source_model, $property->related_properties);
+                        $collection = new Collection();
+                        $collection = $collection->push($virtual_related_model);
+                        $result_properties[$property->name] = $collection;
+                    } else {
+                        $result_properties[$property->name] = $property->fake_value;
+                    }
 
                     break;
                 case SchemeTypeEnum::Single:
-                    /** @var Model $related_source_model */
-                    $related_source_model = new $property->related();
-                    $result_properties[$property->name] = $this->getVirtualModelByProperties($related_source_model, $property->related_properties);
+                    if ($property->related) {
+                        /** @var Model $related_source_model */
+                        $related_source_model = new $property->related();
+                        $result_properties[$property->name] = $this->getVirtualModelByProperties($related_source_model, $property->related_properties);
+                    } else {
+                        $result_properties[$property->name] = $property->fake_value;
+                    }
+
 
                     break;
                 default:
