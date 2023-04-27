@@ -40,9 +40,9 @@ abstract class BaseRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-//        $this->merge([
-//            'slug' => Str::slug($this->slug),
-//        ]);
+        //        $this->merge([
+        //            'slug' => Str::slug($this->slug),
+        //        ]);
     }
 
     /**

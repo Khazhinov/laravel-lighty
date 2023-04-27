@@ -178,6 +178,29 @@ class ModelReflector
     {
         $reflection_model = new ReflectionClass($model);
 
+        // Данная секция необходима для подбора в докблоках неймспейсов для классов,
+        // которые в докблоке указаны без абсолютного пути
+        // Такое случается, когда вы указываете класс в атрибутах use перед объявлением класса
+        // Данный код формирует полный перечь use строк в ассоциативном виде,
+        // где ключом является \ClassName, а значением \Absolute\Path\With\Namespace\To\ClassName
+        /** @var string $file_path */
+        $file_path = $reflection_model->getFileName();
+        $file_data = file_get_contents($file_path);
+        $file_use_blocks = [];
+        if ($file_data) {
+            preg_match_all('/use .*/i', $file_data, $file_use_blocks_raw);
+            if (count($file_use_blocks_raw) === 1) {
+                foreach ($file_use_blocks_raw[0] as $file_use_block_raw) {
+                    // Убираем из строки "use "
+                    $file_use_block_raw = substr($file_use_block_raw, 4, strlen($file_use_block_raw));
+                    // Убираем последний символ ";"
+                    $file_use_block_raw = substr($file_use_block_raw, 0, -1);
+                    $exploded_file_use_block_raw = explode('\\', $file_use_block_raw);
+                    $file_use_blocks[sprintf('\\%s', last($exploded_file_use_block_raw))] = implode('\\', $exploded_file_use_block_raw);
+                }
+            }
+        }
+
         $model_comments = $reflection_model->getDocComment();
         $model_docblock = $model_comments ? DocBlockFactory::createInstance()->create($model_comments) : null;
 
@@ -232,9 +255,17 @@ class ModelReflector
                             // Если к одному
                             if ($property_type::class === Object_::class) {
                                 $tmp_related = (string) $property_type->getFqsen();
+                                // В случае, если класс представлен в виде \ClassName
                                 if (substr_count($tmp_related, '\\') === 1) {
-                                    $tmp_related = '\App\Models' . $tmp_related;
+                                    // Пытаемся найти его в списке use в файле этого класса
+                                    if (array_key_exists($tmp_related, $file_use_blocks)) {
+                                        $tmp_related = $file_use_blocks[$tmp_related];
+                                    } else {
+                                        // Или полагаем, что файл лежит в той же папке, что и этот класс
+                                        $tmp_related = $reflection_model->getNamespaceName() . $tmp_related;
+                                    }
                                 }
+
                                 if (is_a($tmp_related, Model::class, true)) {
                                     $related = $tmp_related;
                                     $nullable = true;
@@ -243,11 +274,19 @@ class ModelReflector
                             }
 
                             // Если ко многим
-                            if ($property_type::class === Array_::class) {
+                            if ($property_type::class === \phpDocumentor\Reflection\Types\Collection::class || $property_type::class === Array_::class) {
                                 $tmp_related = (string) $property_type->getValueType();
+                                // В случае, если класс представлен в виде \ClassName
                                 if (substr_count($tmp_related, '\\') === 1) {
-                                    $tmp_related = '\App\Models' . $tmp_related;
+                                    // Пытаемся найти его в списке use в файле этого класса
+                                    if (array_key_exists($tmp_related, $file_use_blocks)) {
+                                        $tmp_related = $file_use_blocks[$tmp_related];
+                                    } else {
+                                        // Или полагаем, что файл лежит в той же папке, что и этот класс
+                                        $tmp_related = $reflection_model->getNamespaceName() . $tmp_related;
+                                    }
                                 }
+
                                 if (is_a($tmp_related, Model::class, true)) {
                                     $related = $tmp_related;
                                     $nullable = true;
