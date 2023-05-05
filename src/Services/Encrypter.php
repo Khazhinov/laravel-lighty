@@ -12,15 +12,13 @@ use Illuminate\Support\Str;
 use JsonException;
 use Khazhinov\PhpSupport\Patterns\Singleton;
 use RuntimeException;
-
+use SodiumException;
+use Throwable;
 use function sodium_crypto_auth;
 use function sodium_crypto_auth_verify;
 use function sodium_crypto_secretbox;
 use function sodium_crypto_secretbox_keygen;
 use function sodium_crypto_secretbox_open;
-
-use SodiumException;
-use Throwable;
 
 /**
  * @method static Encrypter getInstance()
