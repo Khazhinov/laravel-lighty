@@ -26,6 +26,7 @@ use Khazhinov\LaravelLighty\OpenApi\Complexes\SetPositionActionComplex;
 use Khazhinov\LaravelLighty\OpenApi\Complexes\ShowActionComplex;
 use Khazhinov\LaravelLighty\OpenApi\Complexes\StoreActionComplex;
 use Khazhinov\LaravelLighty\OpenApi\Complexes\UpdateActionComplex;
+use Khazhinov\LaravelLighty\Services\CRUD\DTO\ActionClosureDataDTO;
 use Khazhinov\LaravelLighty\Transaction\WithDBTransaction;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -122,8 +123,8 @@ final class {{ controller_name }} extends ApiCRUDController
         return $this->bulkDestroyAction(
             request: $request,
             options: [],
-            closure: static function (mixed $model_class, ActionClosureModeEnum $mode) {
-                if ($mode === ActionClosureModeEnum::AfterDeleting) {
+            closure: static function (ActionClosureDataDTO $closure_dto) {
+                if ($closure_dto->mode === ActionClosureModeEnum::AfterDeleting) {
                     // do something...
                 }
             }
@@ -177,8 +178,8 @@ final class {{ controller_name }} extends ApiCRUDController
         return $this->storeAction(
             request: $request,
             options: [],
-            closure: static function (mixed $model_class, ActionClosureModeEnum $mode) {
-                if ($mode === ActionClosureModeEnum::BeforeFilling) {
+            closure: static function (ActionClosureDataDTO $closure_dto) {
+                if ($closure_dto->mode === ActionClosureModeEnum::BeforeFilling) {
                     // do something...
                 }
             }
@@ -210,8 +211,8 @@ final class {{ controller_name }} extends ApiCRUDController
             request: $request,
             key: $key,
             options: [],
-            closure: static function (mixed $model_class, ActionClosureModeEnum $mode) {
-                if ($mode === ActionClosureModeEnum::AfterSave) {
+            closure: static function (ActionClosureDataDTO $closure_dto) {
+                if ($closure_dto->mode === ActionClosureModeEnum::AfterSave) {
                     // do something...
                 }
             }
@@ -239,8 +240,8 @@ final class {{ controller_name }} extends ApiCRUDController
         return $this->destroyAction(
             key: $key,
             options: [],
-            closure: static function (mixed $model_class, ActionClosureModeEnum $mode) {
-                if ($mode === ActionClosureModeEnum::BeforeDeleting) {
+            closure: static function (ActionClosureDataDTO $closure_dto) {
+                if ($closure_dto->mode === ActionClosureModeEnum::BeforeDeleting) {
                     // do something...
                 }
             }

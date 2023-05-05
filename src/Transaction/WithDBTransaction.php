@@ -22,7 +22,7 @@ trait WithDBTransaction
 
     public function rollback(): void
     {
-        DB::rollback();
+        DB::rollback(); // @phpstan-ignore-line
     }
 
     /**

@@ -19,14 +19,14 @@ class ApiCRUDControllerActionInitDTO extends DataTransferObject
     public array $action_options;
 
     #[ClassExists]
-    #[ExistsInParents(parent: ApiCRUDControllerOptionDTO::class)]
+    #[ExistsInParents(parent: BaseCRUDOptionDTO::class)]
     public string $action_option_class;
 
     /**
      * @param  ApiCRUDControllerMetaDTO  $controller_meta
-     * @return ApiCRUDControllerOptionDTO
+     * @return BaseCRUDOptionDTO
      */
-    public function getActionOptionDTO(ApiCRUDControllerMetaDTO $controller_meta): ApiCRUDControllerOptionDTO
+    public function getActionOptionDTO(ApiCRUDControllerMetaDTO $controller_meta): BaseCRUDOptionDTO
     {
         $relationships_ignore_allowed = false;
         if (! $controller_meta->hasAllowedRelationships()) {
@@ -45,10 +45,10 @@ class ApiCRUDControllerActionInitDTO extends DataTransferObject
             $action_option_dto = new $this->action_option_class($base_options);
         }
 
-        if (! is_a($action_option_dto, ApiCRUDControllerOptionDTO::class, true)) {
+        if (! is_a($action_option_dto, BaseCRUDOptionDTO::class, true)) {
             /** @var string $tmp_class */
             $tmp_class = $action_option_dto;
-            $tmp_base_class = ApiCRUDControllerOptionDTO::class;
+            $tmp_base_class = BaseCRUDOptionDTO::class;
 
             throw new RuntimeException(sprintf("Class %s must be inherited from class %s", $tmp_class, $tmp_base_class));
         }

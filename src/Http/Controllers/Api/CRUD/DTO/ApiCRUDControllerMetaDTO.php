@@ -16,6 +16,9 @@ use Khazhinov\PhpSupport\Enums\ScalarTypeEnum;
  */
 class ApiCRUDControllerMetaDTO extends DataTransferObject
 {
+    /**
+     * @var class-string
+     */
     #[ClassExists]
     #[ExistsInParents(parent: Model::class)]
     public string $model_class;

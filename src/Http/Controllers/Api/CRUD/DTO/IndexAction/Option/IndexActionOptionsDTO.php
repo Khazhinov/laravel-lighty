@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Option;
 
-use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\ApiCRUDControllerOptionDTO;
+use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\BaseCRUDOptionDTO;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadDTO;
 use Khazhinov\LaravelLighty\Http\Resources\SingleResource;
 use Khazhinov\PhpSupport\DTO\Custer\DataTransferObjectCaster;
@@ -12,7 +12,7 @@ use Khazhinov\PhpSupport\DTO\Validation\ClassExists;
 use Khazhinov\PhpSupport\DTO\Validation\ExistsInParents;
 use Spatie\DataTransferObject\Attributes\CastWith;
 
-class IndexActionOptionsDTO extends ApiCRUDControllerOptionDTO
+class IndexActionOptionsDTO extends BaseCRUDOptionDTO
 {
     /**
      * @var IndexActionOptionsFilters

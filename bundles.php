@@ -11,6 +11,16 @@ namespace Khazhinov\LaravelLightyMongoDBBundle\Models {
     class Model
     {
         /**
+         * Begin querying the model.
+         *
+         * @return \Illuminate\Database\Eloquent\Builder
+         */
+        public static function query(): \Illuminate\Database\Eloquent\Builder
+        {
+            exit(1);
+        }
+
+        /**
          * @param  string  $needle_relation
          * @return bool|string
          */

@@ -8,7 +8,7 @@ use Khazhinov\PhpSupport\DTO\Custer\DataTransferObjectCaster;
 use Khazhinov\PhpSupport\DTO\DataTransferObject;
 use Spatie\DataTransferObject\Attributes\CastWith;
 
-abstract class ApiCRUDControllerOptionDTO extends DataTransferObject
+abstract class BaseCRUDOptionDTO extends DataTransferObject
 {
     /**
      * @var ActionOptionsRelationships
