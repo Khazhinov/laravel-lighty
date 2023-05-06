@@ -39,7 +39,8 @@ class DestroyAction extends BaseCRUDAction
             $key
         );
 
-        event(new DestroyCalled(
+        event(...$this->getEvents(
+            needle_event_class: DestroyCalled::class,
             modelClass: $this->currentModel::class,
             data: $current_model,
         ));
@@ -107,17 +108,19 @@ class DestroyAction extends BaseCRUDAction
                 ]));
             }
 
-            event(new DestroyEnded(
+            event(...$this->getEvents(
+                needle_event_class: DestroyError::class,
                 modelClass: $this->currentModel::class,
                 data: $current_model,
             ));
 
             return true;
         } catch (Throwable $exception) {
-            event(new DestroyError(
+            event(...$this->getEvents(
+                needle_event_class: DestroyError::class,
                 modelClass: $this->currentModel::class,
                 data: $current_model,
-                exception: $exception,
+                exception: $exception
             ));
 
             if ($closure) {

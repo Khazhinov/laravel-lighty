@@ -12,6 +12,9 @@ use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\ActionOptionsDeleted;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\ActionOptionsDeletedModeEnum;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\BaseCRUDOptionDTO;
 use Khazhinov\LaravelLighty\Models\Model;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\BaseCRUDEvent;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\CRUDEvent;
+use Khazhinov\LaravelLighty\Services\CRUD\Exceptions\UndefinedCRUDEventException;
 use Khazhinov\LaravelLighty\Services\CRUD\Exceptions\UnsupportedModelException;
 use Khazhinov\LaravelLighty\Transaction\WithDBTransaction;
 use Khazhinov\LaravelLighty\Transaction\WithDBTransactionInterface;
@@ -62,6 +65,23 @@ abstract class BaseCRUDAction implements WithDBTransactionInterface
         }
 
         $this->currentModel = $currentModel;
+    }
+
+    /**
+     * @param  class-string  $needle_event_class
+     * @param  mixed  ...$args
+     * @return BaseCRUDEvent[]
+     */
+    public function getEvents(string $needle_event_class, ...$args): array
+    {
+        if (!is_a($needle_event_class, BaseCRUDEvent::class, true)) {
+            throw new UndefinedCRUDEventException();
+        }
+
+        return [
+            new CRUDEvent($needle_event_class, ...$args),
+            new $needle_event_class(...$args),
+        ];
     }
 
     /**

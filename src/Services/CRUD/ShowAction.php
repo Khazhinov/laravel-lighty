@@ -22,7 +22,8 @@ class ShowAction extends BaseCRUDAction
      */
     public function handle(ShowActionOptionsDTO $options, mixed $key): Model
     {
-        event(new ShowCalled(
+        event(...$this->getEvents(
+            needle_event_class: ShowCalled::class,
             modelClass: $this->currentModel::class,
             data: $key,
         ));
@@ -32,7 +33,8 @@ class ShowAction extends BaseCRUDAction
             $key
         );
 
-        event(new ShowEnded(
+        event(...$this->getEvents(
+            needle_event_class: ShowEnded::class,
             modelClass: $this->currentModel::class,
             data: $key,
         ));

@@ -35,7 +35,8 @@ class UpdateAction extends BaseCRUDAction
     {
         $current_model = $this->getModelByKey($options, $key);
 
-        event(new UpdateCalled(
+        event(...$this->getEvents(
+            needle_event_class: UpdateCalled::class,
             modelClass: $this->currentModel::class,
             data: $current_model,
         ));
@@ -96,14 +97,16 @@ class UpdateAction extends BaseCRUDAction
 
             $this->loadAllRelationshipsAfterGet();
 
-            event(new UpdateEnded(
+            event(...$this->getEvents(
+                needle_event_class: UpdateEnded::class,
                 modelClass: $this->currentModel::class,
                 data: $current_model,
             ));
 
             return $current_model;
         } catch (Throwable $exception) {
-            event(new UpdateError(
+            event(...$this->getEvents(
+                needle_event_class: UpdateError::class,
                 modelClass: $this->currentModel::class,
                 data: $current_model,
                 exception: $exception,

@@ -21,7 +21,8 @@ class SetPositionAction extends BaseCRUDAction
      */
     public function handle(SetPositionActionOptionsDTO $options, SetPositionActionRequestPayloadDTO $data): bool
     {
-        event(new SetPositionCalled(
+        event(...$this->getEvents(
+            needle_event_class: SetPositionCalled::class,
             modelClass: $this->currentModel::class,
             data: $data,
         ));
@@ -49,14 +50,16 @@ class SetPositionAction extends BaseCRUDAction
             DB::update($raw, $bindings);
             $this->commit();
 
-            event(new SetPositionEnded(
+            event(...$this->getEvents(
+                needle_event_class: SetPositionEnded::class,
                 modelClass: $this->currentModel::class,
                 data: $data,
             ));
 
             return true;
         } catch (Throwable $exception) {
-            event(new SetPositionError(
+            event(...$this->getEvents(
+                needle_event_class: SetPositionError::class,
                 modelClass: $this->currentModel::class,
                 data: $data,
                 exception: $exception,

@@ -25,8 +25,6 @@ abstract class BaseCRUDEvent
         if ($this->data instanceof DataTransferObject) {
             $this->data = $this->data->toArray();
         }
-
-        event(new CRUDEvent(static::class, $this->modelClass, $this->data, $this->exception));
     }
 
     /**

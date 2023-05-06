@@ -32,7 +32,8 @@ class StoreAction extends BaseCRUDAction
      */
     public function handle(StoreActionOptionsDTO $options, array $data, Closure $closure = null): Model
     {
-        event(new StoreCalled(
+        event(...$this->getEvents(
+            needle_event_class: StoreCalled::class,
             modelClass: $this->currentModel::class,
             data: $data,
         ));
@@ -97,14 +98,16 @@ class StoreAction extends BaseCRUDAction
 
             $this->loadAllRelationshipsAfterGet();
 
-            event(new StoreEnded(
+            event(...$this->getEvents(
+                needle_event_class: StoreEnded::class,
                 modelClass: $this->currentModel::class,
                 data: $new_model,
             ));
 
             return $new_model;
         } catch (Throwable $exception) {
-            event(new StoreError(
+            event(...$this->getEvents(
+                needle_event_class: StoreEnded::class,
                 modelClass: $this->currentModel::class,
                 data: $new_model,
                 exception: $exception,

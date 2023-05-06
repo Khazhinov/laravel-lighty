@@ -36,9 +36,10 @@ class BulkDestroyAction extends BaseCRUDAction
      */
     public function handle(BulkDestroyActionOptionsDTO $options, BulkDestroyActionRequestPayloadDTO $data, Closure $closure = null): bool
     {
-        event(new BulkDestroyCalled(
+        event(...$this->getEvents(
+            needle_event_class: BulkDestroyCalled::class,
             modelClass: $this->currentModel::class,
-            data: $data,
+            data: $data
         ));
 
         $this->beginTransaction();
@@ -105,14 +106,16 @@ class BulkDestroyAction extends BaseCRUDAction
                 ]));
             }
 
-            event(new BulkDestroyEnded(
+            event(...$this->getEvents(
+                needle_event_class: BulkDestroyEnded::class,
                 modelClass: $this->currentModel::class,
-                data: $data,
+                data: $data
             ));
 
             return true;
         } catch (Throwable $exception) {
-            event(new BulkDestroyError(
+            event(...$this->getEvents(
+                needle_event_class: BulkDestroyError::class,
                 modelClass: $this->currentModel::class,
                 data: $data,
                 exception: $exception

@@ -54,7 +54,8 @@ class IndexAction extends BaseCRUDAction
      */
     public function handle(Builder|DatabaseBuilder|null $builder, IndexActionOptionsDTO $options, IndexActionRequestPayloadDTO $data, Closure $closure = null): mixed
     {
-        event(new IndexCalled(
+        event(...$this->getEvents(
+            needle_event_class: IndexCalled::class,
             modelClass: $this->currentModel::class,
             data: $data,
         ));
@@ -102,7 +103,8 @@ class IndexAction extends BaseCRUDAction
             $items = $filter_result;
         }
 
-        event(new IndexEnded(
+        event(...$this->getEvents(
+            needle_event_class: IndexEnded::class,
             modelClass: $this->currentModel::class,
             data: $data,
         ));
