@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace Khazhinov\LaravelLighty\Services\CRUD\Events;
 
 use Illuminate\Queue\SerializesModels;
+use Spatie\DataTransferObject\DataTransferObject;
 use Throwable;
 
 abstract class BaseCRUDEvent
@@ -21,7 +22,11 @@ abstract class BaseCRUDEvent
         public mixed $data,
         public ?Throwable $exception = null,
     ) {
-        event(new CRUDEvent(static::class, $modelClass, $data, $exception));
+        if ($this->data instanceof DataTransferObject) {
+            $this->data = $this->data->toArray();
+        }
+
+        event(new CRUDEvent(static::class, $this->modelClass, $this->data, $this->exception));
     }
 
     /**
