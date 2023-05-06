@@ -21,9 +21,9 @@ class SetPositionAction extends BaseCRUDAction
         $this->beginTransaction();
 
         try {
-            $table = $this->current_model->getTable();
+            $table = $this->currentModel->getTable();
             $column = $options->position_column;
-            $primary_column = $this->current_model->getKeyName();
+            $primary_column = $this->currentModel->getKeyName();
             $case = sprintf('CASE %s', $primary_column);
             foreach ($data->ids as $i => $id) {
                 $case .= " WHEN ? THEN $i";

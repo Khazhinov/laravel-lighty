@@ -14,6 +14,7 @@ use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\BulkDestroyAction\Opti
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\BulkDestroyAction\Payload\BulkDestroyActionRequestPayloadDTO;
 use Khazhinov\LaravelLighty\Models\Attributes\Relationships\RelationshipTypeEnum;
 use Khazhinov\LaravelLighty\Services\CRUD\DTO\ActionClosureDataDTO;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\BulkDestroy\BulkDestroyCalled;
 use ReflectionException;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Throwable;
@@ -33,6 +34,8 @@ class BulkDestroyAction extends BaseCRUDAction
      */
     public function handle(BulkDestroyActionOptionsDTO $options, BulkDestroyActionRequestPayloadDTO $data, Closure $closure = null): bool
     {
+        event(new BulkDestroyCalled($this->currentModel::class, $data));
+
         $this->beginTransaction();
 
         try {
@@ -44,10 +47,10 @@ class BulkDestroyAction extends BaseCRUDAction
             }
 
             if ($options->force) {
-                foreach ($this->current_model->getLocalRelations() as $relation_name => $relation_props) {
+                foreach ($this->currentModel->getLocalRelations() as $relation_name => $relation_props) {
                     if ($relation_props->type === RelationshipTypeEnum::BelongsToMany) {
                         /** @var BelongsToMany $relation */
-                        $relation = $this->current_model->$relation_name();
+                        $relation = $this->currentModel->$relation_name();
                         DB::table($relation->getTable())
                             ->whereIn(
                                 $relation->getForeignPivotKeyName(),
@@ -57,7 +60,7 @@ class BulkDestroyAction extends BaseCRUDAction
                     }
                     if ($relation_props->type === RelationshipTypeEnum::HasMany) {
                         /** @var HasMany $relation */
-                        $relation = $this->current_model->$relation_name();
+                        $relation = $this->currentModel->$relation_name();
                         $tmp_key = $relation->getExistenceCompareKey();
                         /** @var int $dot_position */
                         $dot_position = mb_stripos($tmp_key, '.');
@@ -72,13 +75,13 @@ class BulkDestroyAction extends BaseCRUDAction
                 }
 
                 // Получаем очищенный от SoftDelete builder с целью явного удаления
-                $builder = $this->current_model::query();
+                $builder = $this->currentModel::query();
                 /** @var Builder $builder */
-                $builder = $builder->whereIn($this->current_model->getKey(), $data->ids);
+                $builder = $builder->whereIn($this->currentModel->getKey(), $data->ids);
 
                 $builder->forceDelete();
             } else {
-                $this->current_model::destroy($data->ids);
+                $this->currentModel::destroy($data->ids);
             }
 
             if ($closure) {

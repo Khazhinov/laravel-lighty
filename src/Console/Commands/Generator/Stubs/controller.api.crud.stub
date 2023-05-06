@@ -247,25 +247,4 @@ final class {{ controller_name }} extends ApiCRUDController
             }
         );
     }
-
-    /**
-     * @inheritdoc
-     */
-    protected function getDefaultOrder(): array
-    {
-        return [
-            '-id',
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function getQueryBuilder(): Builder|DatabaseBuilder
-    {
-        /** @var Builder|DatabaseBuilder $builder */
-        $builder = {{ model_name }}::query();
-
-        return $builder;
-    }
 }

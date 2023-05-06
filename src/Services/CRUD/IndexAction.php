@@ -14,6 +14,7 @@ use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\In
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadFilterBooleanEnum;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadFilterDTO;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadFilterTypeEnum;
+use Khazhinov\LaravelLighty\Models\Model;
 use Khazhinov\LaravelLighty\Services\CRUD\DTO\ActionClosureDataDTO;
 use Khazhinov\LaravelLighty\Services\CRUD\Exceptions\ColumnMustBeSpecifiedException;
 use ReflectionException;
@@ -22,19 +23,39 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 class IndexAction extends BaseCRUDAction
 {
     /**
+     * Список разрешенных отношений для загрузки.
+     *
+     * @var array<string>
+     */
+    protected array $allowedRelationships = [];
+
+    /**
+     * @param  Model|string|\Khazhinov\LaravelLightyMongoDBBundle\Models\Model  $model
+     * @param  array<string>  $allowedRelationships
+     */
+    public function __construct(Model|string|\Khazhinov\LaravelLightyMongoDBBundle\Models\Model $model, array $allowedRelationships = [])
+    {
+        parent::__construct($model);
+        $this->setAllowedRelationships($allowedRelationships);
+    }
+
+    /**
      * Универсальный метод поиска сущностей
      *
-     * @param  Builder|DatabaseBuilder  $builder
+     * @param  Builder|DatabaseBuilder|null  $builder
      * @param  IndexActionOptionsDTO  $options
      * @param  IndexActionRequestPayloadDTO  $data
-     * @param  array<string>  $orders
      * @param  Closure|null  $closure
      * @return mixed
      * @throws ReflectionException
      * @throws UnknownProperties
      */
-    public function handle(Builder|DatabaseBuilder $builder, IndexActionOptionsDTO $options, IndexActionRequestPayloadDTO $data, array $orders = [], Closure $closure = null): mixed
+    public function handle(Builder|DatabaseBuilder|null $builder, IndexActionOptionsDTO $options, IndexActionRequestPayloadDTO $data, Closure $closure = null): mixed
     {
+        if (is_null($builder)) {
+            $builder = $this->currentModel::query();
+        }
+
         $builder = $this->getPreparedQueryBuilder($builder, $options);
 
         if ($options->filters->enable) {
@@ -42,7 +63,7 @@ class IndexAction extends BaseCRUDAction
         }
 
         if ($options->orders->enable) {
-            $builder = $this->addOrders($options, $data, $builder, $orders);
+            $builder = $this->addOrders($options, $data, $builder, $options->orders->default_orders);
         }
 
         if ($options->relationships->enable) {
@@ -135,7 +156,7 @@ class IndexAction extends BaseCRUDAction
         $boolean = $filter->boolean->value;
 
         if (! mb_stripos($column, '.')) {
-            $column = $this->current_model->getTable().'.'.$column;
+            $column = $this->currentModel->getTable().'.'.$column;
         }
 
         if (is_array($value)) {
@@ -208,7 +229,7 @@ class IndexAction extends BaseCRUDAction
 
             /** @var string $relationship */
             foreach ($relationships as $relationship) {
-                if ($relationship_completed = $this->current_model->completeRelation($relationship)) {
+                if ($relationship_completed = $this->currentModel->completeRelation($relationship)) {
                     /** @var string $relationship_completed */
                     $builder = $this->addRelationship($builder, $relationship_completed, $options->ignore_allowed);
                 }
@@ -234,5 +255,40 @@ class IndexAction extends BaseCRUDAction
         }
 
         return $builder;
+    }
+
+    /**
+     * @param  array<string>  $allowedRelationships
+     * @return void
+     */
+    public function setAllowedRelationships(array $allowedRelationships): void
+    {
+        /** @var array<string> $completed_allowed_relationships */
+        $completed_allowed_relationships = [];
+        foreach ($allowedRelationships as $relationship) {
+            if ($relationship_completed = $this->currentModel->completeRelation($relationship)) {
+                /** @var string $relationship_completed */
+                $completed_allowed_relationships[] = $relationship_completed;
+            }
+        }
+
+        $this->allowedRelationships = $completed_allowed_relationships;
+    }
+
+    /**
+     * @return array<string>
+     */
+    protected function getAllowedRelationships(): array
+    {
+        return $this->allowedRelationships;
+    }
+
+    /**
+     * @param  string  $relationship
+     * @return bool
+     */
+    protected function checkRelationship(string $relationship): bool
+    {
+        return in_array($relationship, $this->getAllowedRelationships(), true);
     }
 }

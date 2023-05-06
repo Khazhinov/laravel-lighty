@@ -28,32 +28,30 @@ abstract class BaseCRUDAction implements WithDBTransactionInterface
      *
      * @var Model|\Khazhinov\LaravelLightyMongoDBBundle\Models\Model
      */
-    protected Model|\Khazhinov\LaravelLightyMongoDBBundle\Models\Model $current_model;
+    protected Model|\Khazhinov\LaravelLightyMongoDBBundle\Models\Model $currentModel;
 
-    /**
-     * Список разрешенных отношений для загрузки.
-     *
-     * @var array<string>
-     */
-    protected array $allowed_relationships = [];
+    public function __construct(Model|\Khazhinov\LaravelLightyMongoDBBundle\Models\Model|string $model)
+    {
+        $this->setCurrentModel($model);
+    }
 
     /**
      * Set controller base model.
      *
-     * @param  Model|\Khazhinov\LaravelLightyMongoDBBundle\Models\Model|string  $current_model
+     * @param  Model|\Khazhinov\LaravelLightyMongoDBBundle\Models\Model|string  $currentModel
      */
-    public function setCurrentModel(mixed $current_model): void
+    public function setCurrentModel(mixed $currentModel): void
     {
-        if (is_string($current_model)) {
-            $current_model = new $current_model();
+        if (is_string($currentModel)) {
+            $currentModel = new $currentModel();
         }
 
-        if (! is_a($current_model, Model::class, true)) {
-            $tmp_class = $current_model::class;
+        if (! is_a($currentModel, Model::class, true)) {
+            $tmp_class = $currentModel::class;
             $mongodb_bundle_base_model_class = '\Khazhinov\LaravelLightyMongoDBBundle\Models\Model';
             // MongoDB Bundle
             if (class_exists($mongodb_bundle_base_model_class)) {
-                if (! is_a($current_model, $mongodb_bundle_base_model_class, true)) {
+                if (! is_a($currentModel, $mongodb_bundle_base_model_class, true)) {
                     throw new UnsupportedModelException($tmp_class, $mongodb_bundle_base_model_class);
                 }
             } else {
@@ -63,42 +61,7 @@ abstract class BaseCRUDAction implements WithDBTransactionInterface
             }
         }
 
-        $this->current_model = $current_model;
-    }
-
-    /**
-     * @param  array<string>  $allowed_relationships
-     * @return void
-     */
-    public function setAllowedRelationships(array $allowed_relationships): void
-    {
-        /** @var array<string> $completed_allowed_relationships */
-        $completed_allowed_relationships = [];
-        foreach ($allowed_relationships as $relationship) {
-            if ($relationship_completed = $this->current_model->completeRelation($relationship)) {
-                /** @var string $relationship_completed */
-                $completed_allowed_relationships[] = $relationship_completed;
-            }
-        }
-
-        $this->allowed_relationships = $completed_allowed_relationships;
-    }
-
-    /**
-     * @return array<string>
-     */
-    protected function getAllowedRelationships(): array
-    {
-        return $this->allowed_relationships;
-    }
-
-    /**
-     * @param  string  $relationship
-     * @return bool
-     */
-    protected function checkRelationship(string $relationship): bool
-    {
-        return in_array($relationship, $this->getAllowedRelationships(), true);
+        $this->currentModel = $currentModel;
     }
 
     /**
@@ -141,7 +104,7 @@ abstract class BaseCRUDAction implements WithDBTransactionInterface
     protected function implementSoftDeleteIfNeed(Builder|DatabaseBuilder $builder, ActionOptionsDeleted $options): Builder|DatabaseBuilder
     {
         if ($options->enable) {
-            $column = $this->current_model->getTable().'.'.$options->column;
+            $column = $this->currentModel->getTable().'.'.$options->column;
 
             switch ($options->mode) {
                 case ActionOptionsDeletedModeEnum::WithoutTrashed:
@@ -175,10 +138,10 @@ abstract class BaseCRUDAction implements WithDBTransactionInterface
      */
     protected function getModelByKey(BaseCRUDOptionDTO $options, mixed $key): Model
     {
-        $builder = $this->getPreparedQueryBuilder($this->current_model::query(), $options);
+        $builder = $this->getPreparedQueryBuilder($this->currentModel::query(), $options);
 
-        $primary_key = $this->current_model->getKeyName();
-        $column = $this->current_model->getTable().'.'.$primary_key;
+        $primary_key = $this->currentModel->getKeyName();
+        $column = $this->currentModel->getTable().'.'.$primary_key;
 
         try {
             /** @var ?Model $model */
@@ -208,6 +171,6 @@ abstract class BaseCRUDAction implements WithDBTransactionInterface
      */
     protected function loadAllRelationshipsAfterGet(): void
     {
-        $this->current_model = $this->current_model->load(array_keys($this->current_model->getLocalRelations()));
+        $this->currentModel = $this->currentModel->load(array_keys($this->currentModel->getLocalRelations()));
     }
 }

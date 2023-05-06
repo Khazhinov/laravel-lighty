@@ -16,6 +16,11 @@ class IndexActionOptionsOrders extends DataTransferObject
     public bool $enable = true;
 
     /**
+     * @var array<string>
+     */
+    public array $default_orders = ['-id'];
+
+    /**
      * Флаг для включения логики контроля положения полей со значением null
      *
      * @var bool

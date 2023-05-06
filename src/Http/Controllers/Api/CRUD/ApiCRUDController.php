@@ -88,16 +88,6 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
     protected string $collection_resource;
 
     /**
-     * @return array<string>
-     */
-    abstract protected function getDefaultOrder(): array;
-
-    /**
-     * @return Builder|DatabaseBuilder
-     */
-    abstract protected function getQueryBuilder(): Builder|DatabaseBuilder;
-
-    /**
      * Get collection of models resource
      *
      * @return string
@@ -163,15 +153,12 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
             throw new UndefinedActionClassException();
         }
 
-        $action = new $action_class();
-        $action->setCurrentModel($this->current_model);
-        $action->setAllowedRelationships($this->allowed_relationships);
-
-        return $action;
+        return new $action_class($this->current_model);
     }
 
     /**
      * @param  BaseRequest  $request
+     * @param  Builder|DatabaseBuilder|null  $builder
      * @param  IndexActionOptionsDTO|array<string, mixed>  $options
      * @param  Closure|null  $closure
      * @return mixed
@@ -179,7 +166,7 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
      * @throws ReflectionException
      * @throws UnknownProperties
      */
-    protected function indexAction(BaseRequest $request, IndexActionOptionsDTO|array $options = [], Closure $closure = null): mixed
+    protected function indexAction(BaseRequest $request, Builder|DatabaseBuilder $builder = null, IndexActionOptionsDTO|array $options = [], Closure $closure = null): mixed
     {
         /** @var IndexActionOptionsDTO $current_options */
         $current_options = $this->initFunction(new ApiCRUDControllerActionInitDTO([
@@ -192,11 +179,11 @@ abstract class ApiCRUDController extends ApiController implements WithDBTransact
 
         /** @var IndexAction $index_action */
         $index_action = $this->getAction(IndexAction::class);
+        $index_action->setAllowedRelationships($this->allowed_relationships);
         $items = $index_action->handle(
-            builder: $this->getQueryBuilder(),
+            builder: $builder,
             options: $current_options,
             data: $current_request,
-            orders: $this->getDefaultOrder(),
             closure: $closure
         );
 

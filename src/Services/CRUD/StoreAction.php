@@ -29,7 +29,7 @@ class StoreAction extends BaseCRUDAction
      */
     public function handle(StoreActionOptionsDTO $options, array $data, Closure $closure = null): Model
     {
-        $current_model_class = $this->current_model::class;
+        $current_model_class = $this->currentModel::class;
         /** @var Model $new_model */
         $new_model = new $current_model_class();
 
