@@ -12,7 +12,6 @@ use Khazhinov\LaravelLighty\Models\Model;
 use Khazhinov\LaravelLighty\Services\CRUD\DTO\ActionClosureDataDTO;
 use Khazhinov\LaravelLighty\Services\CRUD\Events\Store\StoreCalled;
 use Khazhinov\LaravelLighty\Services\CRUD\Events\Store\StoreEnded;
-use Khazhinov\LaravelLighty\Services\CRUD\Events\Store\StoreError;
 use ReflectionException;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Throwable;

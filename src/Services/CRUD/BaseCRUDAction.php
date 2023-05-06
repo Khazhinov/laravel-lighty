@@ -74,7 +74,7 @@ abstract class BaseCRUDAction implements WithDBTransactionInterface
      */
     public function getEvents(string $needle_event_class, ...$args): array
     {
-        if (!is_a($needle_event_class, BaseCRUDEvent::class, true)) {
+        if (! is_a($needle_event_class, BaseCRUDEvent::class, true)) {
             throw new UndefinedCRUDEventException();
         }
 

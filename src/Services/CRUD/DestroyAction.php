@@ -13,7 +13,6 @@ use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\DestroyAction\Option\D
 use Khazhinov\LaravelLighty\Models\Attributes\Relationships\RelationshipTypeEnum;
 use Khazhinov\LaravelLighty\Services\CRUD\DTO\ActionClosureDataDTO;
 use Khazhinov\LaravelLighty\Services\CRUD\Events\Destroy\DestroyCalled;
-use Khazhinov\LaravelLighty\Services\CRUD\Events\Destroy\DestroyEnded;
 use Khazhinov\LaravelLighty\Services\CRUD\Events\Destroy\DestroyError;
 use ReflectionException;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
