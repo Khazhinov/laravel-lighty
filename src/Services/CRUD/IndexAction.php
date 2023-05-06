@@ -16,6 +16,8 @@ use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\In
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\IndexAction\Payload\IndexActionRequestPayloadFilterTypeEnum;
 use Khazhinov\LaravelLighty\Models\Model;
 use Khazhinov\LaravelLighty\Services\CRUD\DTO\ActionClosureDataDTO;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\Index\IndexCalled;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\Index\IndexEnded;
 use Khazhinov\LaravelLighty\Services\CRUD\Exceptions\ColumnMustBeSpecifiedException;
 use ReflectionException;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
@@ -52,6 +54,11 @@ class IndexAction extends BaseCRUDAction
      */
     public function handle(Builder|DatabaseBuilder|null $builder, IndexActionOptionsDTO $options, IndexActionRequestPayloadDTO $data, Closure $closure = null): mixed
     {
+        event(new IndexCalled(
+            modelClass: $this->currentModel::class,
+            data: $data,
+        ));
+
         if (is_null($builder)) {
             $builder = $this->currentModel::query();
         }
@@ -94,6 +101,11 @@ class IndexAction extends BaseCRUDAction
             ]))) {
             $items = $filter_result;
         }
+
+        event(new IndexEnded(
+            modelClass: $this->currentModel::class,
+            data: $data,
+        ));
 
         return $items;
     }

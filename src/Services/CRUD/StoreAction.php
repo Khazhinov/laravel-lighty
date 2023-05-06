@@ -10,6 +10,9 @@ use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\StoreAction\Option\Sto
 use Khazhinov\LaravelLighty\Models\Attributes\Relationships\RelationshipTypeEnum;
 use Khazhinov\LaravelLighty\Models\Model;
 use Khazhinov\LaravelLighty\Services\CRUD\DTO\ActionClosureDataDTO;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\Store\StoreCalled;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\Store\StoreEnded;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\Store\StoreError;
 use ReflectionException;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Throwable;
@@ -29,6 +32,11 @@ class StoreAction extends BaseCRUDAction
      */
     public function handle(StoreActionOptionsDTO $options, array $data, Closure $closure = null): Model
     {
+        event(new StoreCalled(
+            modelClass: $this->currentModel::class,
+            data: $data,
+        ));
+
         $current_model_class = $this->currentModel::class;
         /** @var Model $new_model */
         $new_model = new $current_model_class();
@@ -89,8 +97,19 @@ class StoreAction extends BaseCRUDAction
 
             $this->loadAllRelationshipsAfterGet();
 
+            event(new StoreEnded(
+                modelClass: $this->currentModel::class,
+                data: $new_model,
+            ));
+
             return $new_model;
         } catch (Throwable $exception) {
+            event(new StoreError(
+                modelClass: $this->currentModel::class,
+                data: $new_model,
+                exception: $exception,
+            ));
+
             if ($closure) {
                 $closure(new ActionClosureDataDTO([
                     'mode' => ActionClosureModeEnum::BeforeRollback,

@@ -7,6 +7,9 @@ namespace Khazhinov\LaravelLighty\Services\CRUD;
 use Illuminate\Support\Facades\DB;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\SetPositionAction\Option\SetPositionActionOptionsDTO;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\SetPositionAction\Payload\SetPositionActionRequestPayloadDTO;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\SetPosition\SetPositionCalled;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\SetPosition\SetPositionEnded;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\SetPosition\SetPositionError;
 use Throwable;
 
 class SetPositionAction extends BaseCRUDAction
@@ -18,6 +21,11 @@ class SetPositionAction extends BaseCRUDAction
      */
     public function handle(SetPositionActionOptionsDTO $options, SetPositionActionRequestPayloadDTO $data): bool
     {
+        event(new SetPositionCalled(
+            modelClass: $this->currentModel::class,
+            data: $data,
+        ));
+
         $this->beginTransaction();
 
         try {
@@ -41,8 +49,19 @@ class SetPositionAction extends BaseCRUDAction
             DB::update($raw, $bindings);
             $this->commit();
 
+            event(new SetPositionEnded(
+                modelClass: $this->currentModel::class,
+                data: $data,
+            ));
+
             return true;
         } catch (Throwable $exception) {
+            event(new SetPositionError(
+                modelClass: $this->currentModel::class,
+                data: $data,
+                exception: $exception,
+            ));
+
             $this->rollback();
 
             throw $exception;

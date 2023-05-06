@@ -10,6 +10,9 @@ use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\UpdateAction\Option\Up
 use Khazhinov\LaravelLighty\Models\Attributes\Relationships\RelationshipTypeEnum;
 use Khazhinov\LaravelLighty\Models\Model;
 use Khazhinov\LaravelLighty\Services\CRUD\DTO\ActionClosureDataDTO;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\Update\UpdateCalled;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\Update\UpdateEnded;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\Update\UpdateError;
 use ReflectionException;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Throwable;
@@ -31,6 +34,11 @@ class UpdateAction extends BaseCRUDAction
     public function handle(UpdateActionOptionsDTO $options, string $key, array $data, Closure $closure = null): Model
     {
         $current_model = $this->getModelByKey($options, $key);
+
+        event(new UpdateCalled(
+            modelClass: $this->currentModel::class,
+            data: $current_model,
+        ));
 
         if ($closure) {
             $closure(new ActionClosureDataDTO([
@@ -88,8 +96,19 @@ class UpdateAction extends BaseCRUDAction
 
             $this->loadAllRelationshipsAfterGet();
 
+            event(new UpdateEnded(
+                modelClass: $this->currentModel::class,
+                data: $current_model,
+            ));
+
             return $current_model;
         } catch (Throwable $exception) {
+            event(new UpdateError(
+                modelClass: $this->currentModel::class,
+                data: $current_model,
+                exception: $exception,
+            ));
+
             if ($closure) {
                 $closure(new ActionClosureDataDTO([
                     'mode' => ActionClosureModeEnum::BeforeRollback,

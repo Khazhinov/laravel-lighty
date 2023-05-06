@@ -21,6 +21,7 @@ abstract class BaseCRUDEvent
         public mixed $data,
         public ?Throwable $exception = null,
     ) {
+        event(new CRUDEvent(static::class, $modelClass, $data, $exception));
     }
 
     /**

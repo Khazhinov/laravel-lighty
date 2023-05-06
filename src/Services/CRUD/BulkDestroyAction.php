@@ -15,6 +15,8 @@ use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\BulkDestroyAction\Payl
 use Khazhinov\LaravelLighty\Models\Attributes\Relationships\RelationshipTypeEnum;
 use Khazhinov\LaravelLighty\Services\CRUD\DTO\ActionClosureDataDTO;
 use Khazhinov\LaravelLighty\Services\CRUD\Events\BulkDestroy\BulkDestroyCalled;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\BulkDestroy\BulkDestroyEnded;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\BulkDestroy\BulkDestroyError;
 use ReflectionException;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Throwable;
@@ -34,7 +36,10 @@ class BulkDestroyAction extends BaseCRUDAction
      */
     public function handle(BulkDestroyActionOptionsDTO $options, BulkDestroyActionRequestPayloadDTO $data, Closure $closure = null): bool
     {
-        event(new BulkDestroyCalled($this->currentModel::class, $data));
+        event(new BulkDestroyCalled(
+            modelClass: $this->currentModel::class,
+            data: $data,
+        ));
 
         $this->beginTransaction();
 
@@ -42,7 +47,7 @@ class BulkDestroyAction extends BaseCRUDAction
             if ($closure) {
                 $closure(new ActionClosureDataDTO([
                     'mode' => ActionClosureModeEnum::BeforeDeleting,
-                    'data' => $data->ids,
+                    'data' => $data,
                 ]));
             }
 
@@ -87,7 +92,7 @@ class BulkDestroyAction extends BaseCRUDAction
             if ($closure) {
                 $closure(new ActionClosureDataDTO([
                     'mode' => ActionClosureModeEnum::AfterDeleting,
-                    'data' => $data->ids,
+                    'data' => $data,
                 ]));
             }
 
@@ -96,16 +101,27 @@ class BulkDestroyAction extends BaseCRUDAction
             if ($closure) {
                 $closure(new ActionClosureDataDTO([
                     'mode' => ActionClosureModeEnum::AfterCommit,
-                    'data' => $data->ids,
+                    'data' => $data,
                 ]));
             }
 
+            event(new BulkDestroyEnded(
+                modelClass: $this->currentModel::class,
+                data: $data,
+            ));
+
             return true;
         } catch (Throwable $exception) {
+            event(new BulkDestroyError(
+                modelClass: $this->currentModel::class,
+                data: $data,
+                exception: $exception
+            ));
+
             if ($closure) {
                 $closure(new ActionClosureDataDTO([
                     'mode' => ActionClosureModeEnum::BeforeRollback,
-                    'data' => $data->ids,
+                    'data' => $data,
                     'exception' => $exception,
                 ]));
             }
@@ -115,7 +131,7 @@ class BulkDestroyAction extends BaseCRUDAction
             if ($closure) {
                 $closure(new ActionClosureDataDTO([
                     'mode' => ActionClosureModeEnum::AfterRollback,
-                    'data' => $data->ids,
+                    'data' => $data,
                     'exception' => $exception,
                 ]));
             }

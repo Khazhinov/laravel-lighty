@@ -12,6 +12,9 @@ use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\ActionClosureModeEnum;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\CRUD\DTO\DestroyAction\Option\DestroyActionOptionsDTO;
 use Khazhinov\LaravelLighty\Models\Attributes\Relationships\RelationshipTypeEnum;
 use Khazhinov\LaravelLighty\Services\CRUD\DTO\ActionClosureDataDTO;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\Destroy\DestroyCalled;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\Destroy\DestroyEnded;
+use Khazhinov\LaravelLighty\Services\CRUD\Events\Destroy\DestroyError;
 use ReflectionException;
 use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Throwable;
@@ -35,6 +38,11 @@ class DestroyAction extends BaseCRUDAction
             $options,
             $key
         );
+
+        event(new DestroyCalled(
+            modelClass: $this->currentModel::class,
+            data: $current_model,
+        ));
 
         if ($closure) {
             $closure(new ActionClosureDataDTO([
@@ -99,8 +107,19 @@ class DestroyAction extends BaseCRUDAction
                 ]));
             }
 
+            event(new DestroyEnded(
+                modelClass: $this->currentModel::class,
+                data: $current_model,
+            ));
+
             return true;
         } catch (Throwable $exception) {
+            event(new DestroyError(
+                modelClass: $this->currentModel::class,
+                data: $current_model,
+                exception: $exception,
+            ));
+
             if ($closure) {
                 $closure(new ActionClosureDataDTO([
                     'mode' => ActionClosureModeEnum::BeforeRollback,
