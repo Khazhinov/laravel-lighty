@@ -191,6 +191,8 @@ class ModelReflector
             preg_match_all('/use .*/i', $file_data, $file_use_blocks_raw);
             if (count($file_use_blocks_raw) === 1) {
                 foreach ($file_use_blocks_raw[0] as $file_use_block_raw) {
+                    // Умираем лишние символы
+                    $file_use_block_raw = trim($file_use_block_raw);
                     // Убираем из строки "use "
                     $file_use_block_raw = substr($file_use_block_raw, 4, strlen($file_use_block_raw));
                     // Убираем последний символ ";"
