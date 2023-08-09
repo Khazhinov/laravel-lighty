@@ -429,7 +429,8 @@ class ModelReflector
                 }
             } else {
                 foreach ($model_properties as $model_property) {
-                    if ($model_property->fake_value === $resource_property_value) {
+                    if ($model_property->fake_value === $resource_property_value &&
+                        $model_property->name === $resource_property_name) {
                         $model_property->name = $resource_property_name;
                         $schema_properties[] = $model_property;
                     }
