@@ -9,18 +9,15 @@ use ReflectionProperty;
 use RuntimeException;
 use Spatie\DataTransferObject\Attributes\CastWith;
 
-class DTO
+class DTOValidator
 {
-    /** @var string[] */
-    protected array $keys = [];
-
     /**
-     * @param string $name
+     * @param string $attribute_name
      * @param string $dto_class
      * @return array<string,mixed>
      * @throws ReflectionException
      */
-    public function generateValidation(string $name, string $dto_class): array
+    public function generateValidation(string $attribute_name, string $dto_class): array
     {
         if (class_exists($dto_class)) {
             $reflection_class = new ReflectionClass($dto_class);
@@ -28,7 +25,7 @@ class DTO
             $nullable = false;
             $validation_array = [];
 
-            $validation_array[$name] =
+            $validation_array[$attribute_name] =
                 [
                     "sometimes",
                     'array',
@@ -63,32 +60,32 @@ class DTO
 
                 $rule = $this->removeNullValues($rule);
 
-                $rule_key = "$name.$property_name";
+                $attribute_key = "$attribute_name.$property_name";
 
                 if ($property_type->getName() === "array") {
                     $doc_comment = $property->getDocComment();
                     if ($doc_comment && preg_match('/@var\s+string\[\]/', $doc_comment)) {
                         $rule_string = ["sometimes", "string", "nullable"];
-                        $validation_array[$rule_key . '.*'] = $rule_string;
+                        $validation_array[$attribute_key . '.*'] = $rule_string;
                     }
 
                     $attributes = $property->getAttributes();
                     if (! empty($attributes)) {
-                        $validation_array[$rule_key . '.*'] = $rule;
+                        $validation_array[$attribute_key . '.*'] = $rule;
                         foreach ($attributes as $attribute) {
                             /** @var CastWith $instance */
                             $instance = $attribute->newInstance();
                             $item_type = $instance->args;
-                            $rule_recursive = $this->generateValidation("$name.$property_name.*", $item_type['itemType']);
+                            $rule_recursive = $this->generateValidation("$attribute_name.$property_name.*", $item_type['itemType']);
                             $validation_array = array_merge($validation_array, $rule_recursive);
                         }
                     }
                 } elseif (is_a($property_type->getName(), 'Khazhinov\PhpSupport\DTO\DataTransferObject', true)) {
-                    $rule_recursive = $this->generateValidation($rule_key, $property_type->getName());
+                    $rule_recursive = $this->generateValidation($attribute_key, $property_type->getName());
                     $validation_array = array_merge($validation_array, $rule_recursive);
                 }
 
-                $validation_array[$rule_key] = $rule;
+                $validation_array[$attribute_key] = $rule;
             }
 
             ksort($validation_array);
