@@ -4,10 +4,11 @@ declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Http\Requests;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 use TypeError;
 
-class Enum implements Rule
+class Enum implements ValidationRule
 {
     /**
      * Create a new rule instance.
@@ -20,43 +21,23 @@ class Enum implements Rule
     ) {
     }
 
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
-     */
-    public function passes($attribute, $value): bool
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
+        /** @var string $message */
+        $message = trans('validation.enum');
         if (is_null($value) || ! function_exists('enum_exists') || ! enum_exists($this->type) || ! method_exists(
             $this->type,
             'tryFrom'
         )) {
-            return false;
+            $fail($message)->translate();
         }
 
         try {
-            return ! is_null($this->type::tryFrom($value));
+            if(is_null($this->type::tryFrom($value))) {
+                $fail($message)->translate();
+            };
         } catch (TypeError $e) {
-            return false;
+            $fail($message)->translate();
         }
-    }
-
-    /**
-     * Get the validation error message.
-     *
-     * @return array<int|string, string>
-     */
-    public function message(): array
-    {
-        /** @var array<int|string, string>|string $message */
-        $message = trans('validation.enum');
-
-        if (is_string($message)) {
-            return ['The selected :attribute is invalid.'];
-        }
-
-        return $message;
     }
 }
