@@ -155,6 +155,7 @@ Route::group(["namespace" => "App\Http\Controllers\Api\V1_0", "prefix" => "/v1.0
 });
 ```
 
+
 ## Лицензия
 
 Лицензия MIT. Для получения большей информации обращайтесь к [тексту лицензии](LICENSE.md).
