@@ -9,7 +9,7 @@ use ReflectionProperty;
 use RuntimeException;
 use Spatie\DataTransferObject\Attributes\CastWith;
 
-class DTOValidator
+class DTOReflector
 {
     /**
      * @param string $attribute_name
@@ -17,7 +17,7 @@ class DTOValidator
      * @return array<string,mixed>
      * @throws ReflectionException
      */
-    public function generateValidation(string $attribute_name, string $dto_class): array
+    public function generateRequestValidation(string $attribute_name, string $dto_class): array
     {
         if (class_exists($dto_class)) {
             $reflection_class = new ReflectionClass($dto_class);
@@ -76,12 +76,12 @@ class DTOValidator
                             /** @var CastWith $instance */
                             $instance = $attribute->newInstance();
                             $item_type = $instance->args;
-                            $rule_recursive = $this->generateValidation("$attribute_name.$property_name.*", $item_type['itemType']);
+                            $rule_recursive = $this->generateRequestValidation("$attribute_name.$property_name.*", $item_type['itemType']);
                             $validation_array = array_merge($validation_array, $rule_recursive);
                         }
                     }
                 } elseif (is_a($property_type->getName(), 'Khazhinov\PhpSupport\DTO\DataTransferObject', true)) {
-                    $rule_recursive = $this->generateValidation($attribute_key, $property_type->getName());
+                    $rule_recursive = $this->generateRequestValidation($attribute_key, $property_type->getName());
                     $validation_array = array_merge($validation_array, $rule_recursive);
                 }
 
