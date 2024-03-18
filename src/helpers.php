@@ -8,6 +8,38 @@ use Illuminate\Support\Collection;
 use Khazhinov\LaravelLighty\Http\Requests\Enum;
 use Khazhinov\LaravelLighty\Models\AuthenticatableModel;
 
+if (! function_exists('strict_route')) {
+    /**
+     * Функция возвращает маршрут, сгенерированный фреймворком, но с гарантией
+     * того, что он будет содержать значение APP_URL
+     *
+     * @param string $name
+     * @param array<string, mixed> $parameters
+     * @param bool $absolute
+     * @return string
+     */
+    function strict_route(string $name, array $parameters = [], bool $absolute = true): string
+    {
+        $result = route(
+            name: $name,
+            parameters: $parameters,
+            absolute: $absolute,
+        );
+
+        $strict_app_url = config('app.url');
+        if(str_ends_with($strict_app_url, '/')) {
+            $strict_app_url = substr($strict_app_url, 0, -1);
+        }
+
+        if (! str_starts_with($result, config('app.url'))) {
+            $parsed_result = parse_url($result);
+            $result = sprintf('%s%s', $strict_app_url, $parsed_result['path'] ?? '');
+        }
+
+        return $result;
+    }
+}
+
 if (! function_exists('get_user')) {
     /**
      * Get a guard instance by name.
