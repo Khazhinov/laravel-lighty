@@ -1,4 +1,3 @@
-
 <p align="center"><img src="/art/header.jpg" alt="Social Card of Laravel Lighty"></p>
 
 # Laravel Lighty ⚡️
