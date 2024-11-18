@@ -27,7 +27,7 @@ if (! function_exists('strict_route')) {
         );
 
         $strict_app_url = config('app.url');
-        if(str_ends_with($strict_app_url, '/')) {
+        if (str_ends_with($strict_app_url, '/')) {
             $strict_app_url = substr($strict_app_url, 0, -1);
         }
 

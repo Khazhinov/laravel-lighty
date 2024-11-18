@@ -37,10 +37,10 @@ php artisan vendor:publish --provider="Khazhinov\LaravelLighty\LaravelLightyServ
 ```php
 namespace App\Exceptions;
 
-use Khazhinov\LaravelLighty\Exceptions\ExceptionHandler;
+use Khazhinov\LaravelLighty\Exceptions\JsonExceptionHandler;
 use Throwable;
 
-class Handler extends ExceptionHandler
+class Handler extends JsonExceptionHandler
 {
     /**
      * A list of the exception types that are not reported.

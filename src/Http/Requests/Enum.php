@@ -33,7 +33,7 @@ class Enum implements ValidationRule
         }
 
         try {
-            if(is_null($this->type::tryFrom($value))) {
+            if (is_null($this->type::tryFrom($value))) {
                 $fail($message)->translate();
             };
         } catch (TypeError $e) {

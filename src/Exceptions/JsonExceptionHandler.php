@@ -5,7 +5,6 @@ declare(strict_types = 1);
 namespace Khazhinov\LaravelLighty\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use JsonException;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\DTO\ApiResponseDTO;
@@ -16,16 +15,11 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-abstract class ExceptionHandler extends Handler implements RespondableInterface
+abstract class JsonExceptionHandler extends Handler implements RespondableInterface
 {
     use Respondable;
 
-    public function render(
-        $request,
-        \Throwable $e
-    ): \Illuminate\Http\Response|JsonResponse|\Symfony\Component\HttpFoundation\Response {
-        return $this->jsonRender($request, $e);
-    }
+    public int $json_flags = JSON_UNESCAPED_SLASHES ^ JSON_UNESCAPED_UNICODE ^ JSON_THROW_ON_ERROR;
 
     /**
      * @var array|string[]
@@ -59,12 +53,20 @@ abstract class ExceptionHandler extends Handler implements RespondableInterface
             }
 
             if ($is_need_trace) {
-                $error_trace = json_decode(json_encode($exception->getTrace(), JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR);
+                $error_trace = json_decode(
+                    json: json_encode(
+                        value: $exception->getTrace(),
+                        flags: $this->json_flags,
+                    ),
+                    associative: true,
+                    flags: $this->json_flags,
+                );
             }
         }
 
         return $this->respond(
-            $this->buildActionResponseDTO($exception, $error_data, $error_trace)
+            action_response: $this->buildActionResponseDTO($exception, $error_data, $error_trace),
+            json_flags: $this->json_flags,
         );
     }
 

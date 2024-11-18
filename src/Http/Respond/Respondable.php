@@ -14,9 +14,13 @@ trait Respondable
     /**
      * @throws JsonException
      */
-    public function respond(ApiResponseDTO $action_response, Closure $closure = null): Response
-    {
-        $content = json_encode($action_response->buildResponseContent(), JSON_THROW_ON_ERROR);
+    public function respond(
+        ApiResponseDTO $action_response,
+        Closure $closure = null,
+        int $json_flags = JSON_UNESCAPED_SLASHES ^ JSON_UNESCAPED_UNICODE ^ JSON_THROW_ON_ERROR
+    ): Response {
+        $content = json_encode($action_response->buildResponseContent(), $json_flags);
+
         $response = new Response(
             $content,
             $this->normalizeStatusCode($action_response->code),
