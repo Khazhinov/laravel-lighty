@@ -21,25 +21,25 @@
     "ext-fileinfo": "*",
     "ext-json": "*",
     "ext-sodium": "*",
-    "illuminate/bus": "^10.0",
-    "illuminate/config": "^10.0",
-    "illuminate/console": "^10.0",
-    "illuminate/database": "^10.0",
-    "illuminate/http": "^10.0",
-    "illuminate/pipeline": "^10.0",
-    "illuminate/support": "^10.0",
-    "khazhinov/laravel-fly-docs": "^10.0",
-    "khazhinov/php-support": "^1.0",
+    "illuminate/bus": "^11.0",
+    "illuminate/config": "^11.0",
+    "illuminate/console": "^11.0",
+    "illuminate/database": "^11.0",
+    "illuminate/http": "^11.0",
+    "illuminate/pipeline": "^11.0",
+    "illuminate/support": "^11.0",
+    "khazhinov/laravel-fly-docs": "^11.0",
+    "khazhinov/php-support": "^1.1",
     "maatwebsite/excel": "^3.1",
-    "psr/simple-cache": "^1.0",
+    "psr/simple-cache": "^3.0",
     "spatie/data-transfer-object": "^3.8",
-    "symfony/console": "^6.1"
+    "symfony/console": "^7.0"
   },
   "require-dev": {
-    "friendsofphp/php-cs-fixer": "^3.11",
-    "laravel/framework": "^10.0",
-    "phpstan/extension-installer": "^1.1",
-    "phpstan/phpstan-symfony": "^1.2"
+    "friendsofphp/php-cs-fixer": "^3.64",
+    "laravel/framework": "^11.0",
+    "phpstan/extension-installer": "^1.4",
+    "phpstan/phpstan-symfony": "^2.0"
   },
   "autoload": {
     "psr-4": {
@@ -64,6 +64,6 @@
   },
   "scripts": {
     "analyse": "vendor/bin/phpstan analyse --configuration phpstan.neon --no-progress",
-    "format": "vendor/bin/php-cs-fixer fix --config cs_dist.php --allow-risky=yes"
+    "format": "vendor/bin/php-cs-fixer fix --config cs_dist.php --allow-risky=yes --show-progress=none"
   }
 }
