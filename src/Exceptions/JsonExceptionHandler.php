@@ -4,7 +4,6 @@ declare(strict_types = 1);
 
 namespace Khazhinov\LaravelLighty\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler;
 use Illuminate\Http\Request;
 use JsonException;
 use Khazhinov\LaravelLighty\Http\Controllers\Api\DTO\ApiResponseDTO;
@@ -15,7 +14,7 @@ use Spatie\DataTransferObject\Exceptions\UnknownProperties;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-abstract class JsonExceptionHandler extends Handler implements RespondableInterface
+abstract class JsonExceptionHandler implements RespondableInterface
 {
     use Respondable;
 
@@ -81,13 +80,10 @@ abstract class JsonExceptionHandler extends Handler implements RespondableInterf
     ): ApiResponseDTO {
         $code = Response::HTTP_BAD_REQUEST;
 
-        $headers = ['Content-Type' => 'application/json'];
-
         $response = [
             'status' => 'error',
             'code' => $this->normalizeStatusCode($exception->getCode()),
             'message' => Response::$statusTexts[$code] ?? 'Something went wrong..',
-            'headers' => $headers,
             'error' => $error_data,
         ];
 

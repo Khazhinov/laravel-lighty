@@ -31,7 +31,9 @@ class ApiResponseDTO extends DataTransferObject
     /**
      * @var array<string, string>
      */
-    public array $headers;
+    public array $headers = [
+        'Content-Type' => 'application/json',
+    ];
 
     /**
      * @return array<string, mixed>
