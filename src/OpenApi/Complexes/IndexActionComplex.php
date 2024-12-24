@@ -55,7 +55,7 @@ class IndexActionComplex extends ComplexFactory
                         Schema::array('filter')->items(
                             Schema::object('')->properties(
                                 Schema::string('type')
-                                    ->enum(['single', 'group'])
+                                    ->enum('single', 'group')
                                     ->description('Тип объекта фильтра')
                                     ->default('single'),
                                 Schema::array('group')
@@ -70,7 +70,7 @@ class IndexActionComplex extends ComplexFactory
                                     ->description('Столбец сущности, по которому необходимо осуществить поиск')
                                     ->default('='),
                                 Schema::string('boolean')
-                                    ->enum(...['and', 'or'])
+                                    ->enum('and', 'or')
                                     ->description('Логическая операция склеивания')
                                     ->default('and'),
                                 Schema::string('value')
