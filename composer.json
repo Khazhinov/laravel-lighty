@@ -28,7 +28,7 @@
     "illuminate/http": "^11.0",
     "illuminate/pipeline": "^11.0",
     "illuminate/support": "^11.0",
-    "khazhinov/laravel-fly-docs": "^11.0",
+    "khazhinov/laravel-fly-docs": "^11.1",
     "khazhinov/php-support": "^1.1",
     "maatwebsite/excel": "^3.1",
     "psr/simple-cache": "^3.0",
